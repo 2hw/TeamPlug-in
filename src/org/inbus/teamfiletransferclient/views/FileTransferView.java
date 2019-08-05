@@ -31,17 +31,20 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.part.ViewPart;
+import org.inbus.teamfiletransferclient.core.FileTransfer;
 import org.inbus.teamfiletransferclient.impl.FileModifiedLabelProvider;
 import org.inbus.teamfiletransferclient.impl.FileSizeLabelProvider;
+import org.inbus.teamfiletransferclient.impl.ModelProvider;
 import org.inbus.teamfiletransferclient.impl.ViewContentProvider;
 import org.inbus.teamfiletransferclient.impl.ViewLabelProvider;
 import org.inbus.teamfiletransferclient.model.FileModel;
-import org.inbus.teamfiletransferclient.model.ModelProvider;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 
 /**
@@ -75,16 +78,20 @@ public class FileTransferView extends ViewPart {
 	private TableViewer TBViewer;
 	
 
-	 private static final DateFormat dateFormat = DateFormat.getDateInstance();
+	private static final DateFormat dateFormat = DateFormat.getDateInstance();
 	
 	@Inject IWorkbench workbench;
-	private Text text;
-	private Text text_1;
-	private Text text_2;
-	private Text text_3;
+	private Text txtHost;
+	private Text txtUserName;
+	private Text txtPassword;
+	private Text txtPort;
 	private Text text_4;
 	
 
+	private FileTransfer ft = new FileTransfer();
+	
+	private boolean connectResult = true;
+	
 	@Override
 	public void createPartControl(Composite parent) {
 		//grpFTP
@@ -102,29 +109,33 @@ public class FileTransferView extends ViewPart {
 		lblNewLabel.setLayoutData(gd_lblNewLabel);
 		lblNewLabel.setText("\uD638\uC2A4\uD2B8(H):");
 		
-		text = new Text(grpConnect, SWT.BORDER);
-		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		txtHost = new Text(grpConnect, SWT.BORDER);
+		txtHost.setText("210.103.215.160");
+		txtHost.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblNewLabel_1 = new Label(grpConnect, SWT.NONE);
 		lblNewLabel_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		lblNewLabel_1.setText("\uC0AC\uC6A9\uC790\uBA85(U):");
 		
-		text_1 = new Text(grpConnect, SWT.BORDER);
-		text_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		txtUserName = new Text(grpConnect, SWT.BORDER);
+		txtUserName.setText("testuser");
+		txtUserName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblNewLabel_2 = new Label(grpConnect, SWT.NONE);
 		lblNewLabel_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		lblNewLabel_2.setText("\uBE44\uBC00\uBC88\uD638(W):");
 		
-		text_2 = new Text(grpConnect, SWT.BORDER);
-		text_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		txtPassword = new Text(grpConnect, SWT.BORDER | SWT.PASSWORD);
+		txtPassword.setText("xptmxmdbwj1q2w3e4r!@#$");
+		txtPassword.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblNewLabel_3 = new Label(grpConnect, SWT.NONE);
 		lblNewLabel_3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		lblNewLabel_3.setText("\uD3EC\uD2B8(P):");
 		
-		text_3 = new Text(grpConnect, SWT.BORDER);
-		text_3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		txtPort = new Text(grpConnect, SWT.BORDER);
+		txtPort.setText("3322");
+		txtPort.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		new Label(grpConnect, SWT.NONE);
 		
 		Button btnNewButton = new Button(grpConnect, SWT.NONE);
@@ -159,7 +170,9 @@ public class FileTransferView extends ViewPart {
 		
 		Group grpView_Local = new Group(grpview, SWT.NONE);
 		grpView_Local.setLayoutData(new RowData(SWT.DEFAULT, 291));
-        grpView_Local.setLayout(new GridLayout(1, false));
+        GridLayout gl_grpView_Local = new GridLayout(1, false);
+        gl_grpView_Local.marginLeft = 50;
+        grpView_Local.setLayout(gl_grpView_Local);
                 
         //TreeView 컴포넌트 생성
         TRViewer = new TreeViewer(grpView_Local, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -197,6 +210,10 @@ public class FileTransferView extends ViewPart {
 	
 	    //표시할 리스트 목록 설정
 	    TRViewer.setInput(File.listRoots());
+	    
+	    //현재 선택된 TreeView의 디렉토리
+	    
+	    TRViewer.refresh();
 	
 	    
 		//TableViewer 컴포넌트 생성
@@ -210,15 +227,37 @@ public class FileTransferView extends ViewPart {
         table.setLinesVisible(true);
         
         TBViewer.setContentProvider(new ArrayContentProvider());
+        
         TBViewer.setInput(ModelProvider.INSTANCE.getFileModel());
+        
+        
 		FormData fd_grpConfirm = new FormData();
 		fd_grpConfirm.left = new FormAttachment(0);
 		fd_grpConfirm.right = new FormAttachment(100, -6);
 		fd_grpConfirm.top = new FormAttachment(0, 482);
 		grpConfirm.setLayoutData(fd_grpConfirm);
         
- 
-        
+		/*
+		 * 사용자 이벤트 정의
+		 */
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseUp(MouseEvent e) {
+				
+				try {
+					connectResult = ft.remoteConnect(txtHost.getText(), txtUserName.getText(), txtPassword.getText(), txtPort.getText());
+				} catch (Exception e1) {
+					
+					e1.printStackTrace();
+				}
+				
+				if(connectResult == false) {
+					System.out.println("Connecting fail~~~~~!!!");
+				}else {
+					System.out.println("Connecting sucess~~~~~!!!");
+				}
+			}
+		});
 		
 	}
 

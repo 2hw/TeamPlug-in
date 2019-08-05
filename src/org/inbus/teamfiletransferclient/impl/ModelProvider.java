@@ -1,7 +1,9 @@
-package org.inbus.teamfiletransferclient.model;
+package org.inbus.teamfiletransferclient.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.inbus.teamfiletransferclient.model.FileModel;
 
 public enum ModelProvider {
 	INSTANCE;

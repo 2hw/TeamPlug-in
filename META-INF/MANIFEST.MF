@@ -10,4 +10,5 @@ Require-Bundle: org.eclipse.core.runtime,
 Automatic-Module-Name: TeamFileTransferClient;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .,
- swing2swt.jar
+ swing2swt.jar,
+ lib/jsch-0.1.55.jar
