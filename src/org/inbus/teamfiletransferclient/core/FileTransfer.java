@@ -1,20 +1,13 @@
 package org.inbus.teamfiletransferclient.core;
 
-import java.io.FileInputStream;
-
 import org.inbus.teamfiletransferclient.exceptions.InvalidServerInformationException;
-import org.inbus.teamfiletransferclient.impl.FTPConnect;
+import org.inbus.teamfiletransferclient.impl.SFTPConnect;
 import org.inbus.teamfiletransferclient.model.ConnectionInfoModel;
-
-import com.jcraft.jsch.Channel;
-import com.jcraft.jsch.ChannelSftp;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
 
 public class FileTransfer {
 	
 	private ConnectionInfoModel connectInfo = new ConnectionInfoModel();
-	private FTPConnect ftpConnect = new FTPConnect();
+	private SFTPConnect ftpConnect = new SFTPConnect();
 	
 	public boolean remoteConnect(String host, String userName, String password, String port) throws Exception {
 		
@@ -30,7 +23,8 @@ public class FileTransfer {
 		
 		System.out.println("=> Connecting to " + host);
 		
-		return ftpConnect.connectService(connectInfo);
+		
+		return  ftpConnect.connectService(connectInfo);
 	}
 	
 	private boolean checkConnectionInfo(String param) throws Exception{

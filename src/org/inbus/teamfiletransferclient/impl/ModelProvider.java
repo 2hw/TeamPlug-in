@@ -13,7 +13,7 @@ public enum ModelProvider {
 	private ModelProvider() {
 		fileModel = new ArrayList<FileModel>();
 		
-		fileModel.add(new FileModel("ÆÄÀÏÀÌ¸§ÀÌ´Ù..", "¿ÀÁã", "³¯Â¥ÀÎ°¡"));
+		fileModel.add(new FileModel("íŒŒì¼ëª…ì´ë‹¤", "ì˜¤ì¥", "2019.08.06"));
 		
 	}
 	

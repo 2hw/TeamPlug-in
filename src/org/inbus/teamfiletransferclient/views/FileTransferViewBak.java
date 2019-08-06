@@ -65,8 +65,8 @@ import org.eclipse.swt.events.MouseEvent;
  * <p>
  */
 
-public class FileTransferView extends ViewPart {
-	public FileTransferView() {
+public class FileTransferViewBak extends ViewPart {
+	public FileTransferViewBak() {
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class FileTransferView extends ViewPart {
 
 	private FileTransfer ft = new FileTransfer();
 	
-	private boolean connectResult = true;
+	private boolean connectResult;
 	
 	@Override
 	public void createPartControl(Composite parent) {
@@ -174,14 +174,14 @@ public class FileTransferView extends ViewPart {
         gl_grpView_Local.marginLeft = 50;
         grpView_Local.setLayout(gl_grpView_Local);
                 
-        //TreeView ÄÄÆ÷³ÍÆ® »ý¼º
+        //TreeView ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         TRViewer = new TreeViewer(grpView_Local, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
         Tree tree = TRViewer.getTree();
         GridData gd_tree = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
         gd_tree.heightHint = 137;
         tree.setLayoutData(gd_tree);
         
-        //TreeView¿¡ Ç¥½Ã¸¦ À§ÇÑ Provider
+        //TreeViewï¿½ï¿½ Ç¥ï¿½Ã¸ï¿½ ï¿½ï¿½ï¿½ï¿½ Provider
         TRViewer.setContentProvider(new ViewContentProvider());
         TRViewer.getTree().setHeaderVisible(true);
         
@@ -191,7 +191,7 @@ public class FileTransferView extends ViewPart {
         
         TreeViewerColumn fileSizeColumn = new TreeViewerColumn(TRViewer, SWT.NONE);
         mainColumn.getColumn().setText("Name");
-        mainColumn.getColumn().setWidth(140);
+        mainColumn.getColumn().setWidth(180);
         mainColumn.setLabelProvider(
                 new DelegatingStyledCellLabelProvider(
                         new ViewLabelProvider(createImageDescriptor())
@@ -208,15 +208,15 @@ public class FileTransferView extends ViewPart {
         fileSizeColumn.setLabelProvider(new DelegatingStyledCellLabelProvider(
 	    new FileSizeLabelProvider()));
 	
-	    //Ç¥½ÃÇÒ ¸®½ºÆ® ¸ñ·Ï ¼³Á¤
+	    //Ç¥ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	    TRViewer.setInput(File.listRoots());
 	    
-	    //ÇöÀç ¼±ÅÃµÈ TreeViewÀÇ µð·ºÅä¸®
+	    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ãµï¿½ TreeViewï¿½ï¿½ ï¿½ï¿½ï¿½ä¸®
 	    
 	    TRViewer.refresh();
 	
 	    
-		//TableViewer ÄÄÆ÷³ÍÆ® »ý¼º
+		//TableViewer ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
 	    TBViewer = new TableViewer(grpView_Local, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 	    createColumns(grpView_Local, TBViewer);
         final Table table = TBViewer.getTable();
@@ -238,7 +238,7 @@ public class FileTransferView extends ViewPart {
 		grpConfirm.setLayoutData(fd_grpConfirm);
         
 		/*
-		 * »ç¿ëÀÚ ÀÌº¥Æ® Á¤ÀÇ
+		 * ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½
 		 */
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -256,6 +256,7 @@ public class FileTransferView extends ViewPart {
 				}else {
 					System.out.println("Connecting sucess~~~~~!!!");
 				}
+				
 			}
 		});
 		
