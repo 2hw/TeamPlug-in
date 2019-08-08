@@ -88,7 +88,6 @@ public class FileTransferView extends ViewPart {
 	private FileTransfer ft = new FileTransfer();
 	
 	private boolean connectResult;
-	
 
 	@Override
 	public void createPartControl(Composite parent) {
