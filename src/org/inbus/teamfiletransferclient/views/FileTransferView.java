@@ -86,7 +86,6 @@ public class FileTransferView extends ViewPart {
 	private Table table_file;
 	 
 	private FileTransfer ft = new FileTransfer();
-	
 	private boolean connectResult;
 
 	@Override
