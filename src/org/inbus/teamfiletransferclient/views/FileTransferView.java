@@ -314,7 +314,6 @@ public class FileTransferView extends ViewPart {
 	        return viewerColumn;
 
 	    }
-	
 
 	@Override
 	public void setFocus() {
