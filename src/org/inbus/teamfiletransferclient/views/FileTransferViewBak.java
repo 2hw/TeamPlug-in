@@ -245,7 +245,7 @@ public class FileTransferViewBak extends ViewPart {
 			public void mouseUp(MouseEvent e) {
 				
 				try {
-					connectResult = ft.remoteConnect(txtHost.getText(), txtUserName.getText(), txtPassword.getText(), txtPort.getText());
+//					connectResult = ft.remoteConnect(txtHost.getText(), txtUserName.getText(), txtPassword.getText(), txtPort.getText());
 				} catch (Exception e1) {
 					
 					e1.printStackTrace();
