@@ -85,6 +85,9 @@ public class FileTransferView extends ViewPart {
 	private TableViewer localTBViewer;
 	private TreeViewer remoteTRViewer;
 	private TableViewer remoteTBViewer;
+	
+	private FileTransfer fileTF = new FileTransfer();
+	private TreeFileModel trFileMD;
 	private List<TreeFileModel> allDirectoryList = new ArrayList<>();
 	
 	
@@ -99,7 +102,6 @@ public class FileTransferView extends ViewPart {
 	private Table table_remote;
 	private Table table_file;
 	 
-	private FileTransfer ft = new FileTransfer();
 	
 	
 
@@ -232,7 +234,33 @@ public class FileTransferView extends ViewPart {
 		
 		remoteTBViewer = new TableViewer(group_remote, SWT.BORDER | SWT.FULL_SELECTION);
 		table_remote = remoteTBViewer.getTable();
+		table_remote.setHeaderVisible(true);
 		table_remote.setBounds(0, 280, 530, 260);
+		
+		TableViewerColumn tableViewerColumn = new TableViewerColumn(remoteTBViewer, SWT.NONE);
+		TableColumn tblclmnNewColumn = tableViewerColumn.getColumn();
+		tblclmnNewColumn.setWidth(100);
+		tblclmnNewColumn.setText(trFileMD.COLUMN_HEADER[0]);
+		
+		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(remoteTBViewer, SWT.NONE);
+		TableColumn tblclmnNewColumn_1 = tableViewerColumn_1.getColumn();
+		tblclmnNewColumn_1.setWidth(100);
+		tblclmnNewColumn_1.setText(trFileMD.COLUMN_HEADER[1]);
+		
+		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(remoteTBViewer, SWT.NONE);
+		TableColumn tblclmnNewColumn_2 = tableViewerColumn_2.getColumn();
+		tblclmnNewColumn_2.setWidth(100);
+		tblclmnNewColumn_2.setText(trFileMD.COLUMN_HEADER[2]);
+		
+		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(remoteTBViewer, SWT.NONE);
+		TableColumn tblclmnNewColumn_3 = tableViewerColumn_3.getColumn();
+		tblclmnNewColumn_3.setWidth(100);
+		tblclmnNewColumn_3.setText(trFileMD.COLUMN_HEADER[3]);
+		
+		TableViewerColumn tableViewerColumn_4 = new TableViewerColumn(remoteTBViewer, SWT.NONE);
+		TableColumn tblclmnNewColumn_4 = tableViewerColumn_4.getColumn();
+		tblclmnNewColumn_4.setWidth(100);
+		tblclmnNewColumn_4.setText(trFileMD.COLUMN_HEADER[4]);
 		
 		Label label_remoteResult = new Label(group_remote, SWT.NONE);
 		label_remoteResult.setBounds(0, 550, 530, 30);
@@ -248,7 +276,7 @@ public class FileTransferView extends ViewPart {
 		btn_search.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				TreeParent root = ft.remoteConnect(txt_host.getText(), txt_userName.getText(), txt_pwd.getText(), txt_port.getText());
+				TreeParent root = fileTF.remoteConnect(txt_host.getText(), txt_userName.getText(), txt_pwd.getText(), txt_port.getText());
 				TreeParent invisibleRoot = new TreeParent("", "");
 				invisibleRoot.addChild(root);
 				
@@ -260,8 +288,8 @@ public class FileTransferView extends ViewPart {
 				remoteTBViewer.setContentProvider(new ArrayContentProvider());
 				remoteTBViewer.setLabelProvider(new RemoteTableViewLabelProvider(workbench));
 				
-				allDirectoryList.addAll(ft.getFileModel());
-//					remoteTBViewer.setInput(sftpTest.getFileModel());
+				allDirectoryList.addAll(fileTF.getFileModel());
+//					remoteTBViewer.setInput(sfileTFpTest.getFileModel());
 				remoteTBViewer.refresh();
 				
 				remoteTBViewer.getControl().setFocus();
