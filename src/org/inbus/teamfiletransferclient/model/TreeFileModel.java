@@ -29,7 +29,14 @@ public class TreeFileModel {
 		this.path = path;
 	}
 	
-	
+	public TreeFileModel(String name, int size, String modified_date, String path) {
+		super();
+		this.name = name;
+		this.size = size;
+		this.modified_date = modified_date;
+		this.path = path;
+	}
+
 	public String getName() {
 		return name;
 	}

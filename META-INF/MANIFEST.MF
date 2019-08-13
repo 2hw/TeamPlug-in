@@ -6,7 +6,8 @@ Bundle-Version: 1.0.0.qualifier
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.ui
+ org.eclipse.ui,
+ org.eclipse.jface
 Automatic-Module-Name: TeamFileTransferClient;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .,

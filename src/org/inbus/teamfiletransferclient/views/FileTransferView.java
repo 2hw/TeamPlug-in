@@ -2,23 +2,15 @@ package org.inbus.teamfiletransferclient.views;
 
 
 import java.io.File;
-import java.net.URL;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -39,19 +31,11 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.part.ViewPart;
 import org.inbus.teamfiletransferclient.core.FileTransfer;
-import org.inbus.teamfiletransferclient.impl.FileModifiedLabelProvider;
-import org.inbus.teamfiletransferclient.impl.FileSizeLabelProvider;
-import org.inbus.teamfiletransferclient.impl.ModelProvider;
-import org.inbus.teamfiletransferclient.impl.RemoteTableViewLabelProvider;
-import org.inbus.teamfiletransferclient.impl.RemoteTreeViewLabelProvider;
-import org.inbus.teamfiletransferclient.impl.RomoteTreeViewContentProvider;
-import org.inbus.teamfiletransferclient.impl.ViewContentProvider;
-import org.inbus.teamfiletransferclient.impl.ViewLabelProvider;
-import org.inbus.teamfiletransferclient.model.FileModel;
+import org.inbus.teamfiletransferclient.impl.TableViewLabelProvider;
+import org.inbus.teamfiletransferclient.impl.TreeViewContentProvider;
+import org.inbus.teamfiletransferclient.impl.TreeViewLabelProvider;
 import org.inbus.teamfiletransferclient.model.TreeFileModel;
 import org.inbus.teamfiletransferclient.model.TreeParent;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
 
 
 /**
@@ -88,10 +72,9 @@ public class FileTransferView extends ViewPart {
 	
 	private FileTransfer fileTF = new FileTransfer();
 	private TreeFileModel trFileMD;
-	private List<TreeFileModel> allDirectoryList = new ArrayList<>();
-	
-	
-	private static final DateFormat dateFormat = DateFormat.getDateInstance();
+	private List<TreeFileModel> remot_allDirectoryList;
+	private List<TreeFileModel> local_allDirectoryList;
+	private String absolutePath = "";
 	
 	@Inject IWorkbench workbench;
 	private Text txt_host;
@@ -177,31 +160,8 @@ public class FileTransferView extends ViewPart {
 		tree_local.setBounds(0, 64, 530, 205);
 		
 		//TreeView Provider
-        localTRViewer.setContentProvider(new ViewContentProvider());
-        localTRViewer.getTree().setHeaderVisible(true);
-        
-        TreeViewerColumn mainColumn = new TreeViewerColumn(localTRViewer, SWT.NONE);
-        
-        TreeViewerColumn modifiedColumn = new TreeViewerColumn(localTRViewer, SWT.NONE);
-        
-        TreeViewerColumn fileSizeColumn = new TreeViewerColumn(localTRViewer, SWT.NONE);
-        mainColumn.getColumn().setText("Name");
-        mainColumn.getColumn().setWidth(180);
-        mainColumn.setLabelProvider(
-                new DelegatingStyledCellLabelProvider(
-                        new ViewLabelProvider(createImageDescriptor())
-                        ));
-        modifiedColumn.getColumn().setText("Last Modified");
-        modifiedColumn.getColumn().setWidth(100);
-        modifiedColumn.getColumn().setAlignment(SWT.RIGHT);
-        modifiedColumn
-                .setLabelProvider(new DelegatingStyledCellLabelProvider(
-                        new FileModifiedLabelProvider(dateFormat)));
-        fileSizeColumn.getColumn().setText("Size");
-        fileSizeColumn.getColumn().setWidth(89);
-        fileSizeColumn.getColumn().setAlignment(SWT.RIGHT);
-        fileSizeColumn.setLabelProvider(new DelegatingStyledCellLabelProvider(
-	    new FileSizeLabelProvider()));
+        localTRViewer.setContentProvider(new TreeViewContentProvider());
+        localTRViewer.setLabelProvider(new TreeViewLabelProvider(workbench));
         
         //TreeViewer 데이터 설정
 	    localTRViewer.setInput(File.listRoots());
@@ -209,14 +169,30 @@ public class FileTransferView extends ViewPart {
 		
 	    //TableViewer
 	    localTBViewer = new TableViewer(group_local, SWT.BORDER | SWT.FULL_SELECTION);
-	    createColumns(group_local, localTBViewer);
+//	    createColumns(group_local, localTBViewer);
 		table_local = localTBViewer.getTable();
 		table_local.setHeaderVisible(true);
 		table_local.setBounds(0, 280, 530, 260);
 		
+		TableViewerColumn tableViewerColumn2 = new TableViewerColumn(localTBViewer, SWT.NONE);
+		TableColumn tblclmnNewColumn2 = tableViewerColumn2.getColumn();
+		tblclmnNewColumn2.setWidth(100);
+		tblclmnNewColumn2.setText(trFileMD.COLUMN_HEADER[0]);
+		
+		TableViewerColumn tableViewerColumn2_1 = new TableViewerColumn(localTBViewer, SWT.NONE);
+		TableColumn tblclmnNewColumn2_1 = tableViewerColumn2_1.getColumn();
+		tblclmnNewColumn2_1.setWidth(100);
+		tblclmnNewColumn2_1.setText(trFileMD.COLUMN_HEADER[1]);
+		
+		TableViewerColumn tableViewerColumn2_2 = new TableViewerColumn(localTBViewer, SWT.NONE);
+		TableColumn tblclmnNewColumn2_2 = tableViewerColumn2_2.getColumn();
+		tblclmnNewColumn2_2.setWidth(100);
+		tblclmnNewColumn2_2.setText(trFileMD.COLUMN_HEADER[2]);
+		
 		//TableView Provider
-		localTBViewer.setContentProvider(new ArrayContentProvider());
-        localTBViewer.setInput(ModelProvider.INSTANCE.getFileModel());
+		
+		
+		
 		
 		Label label_localResult = new Label(group_local, SWT.NONE);
 		label_localResult.setBounds(0, 550, 530, 30);
@@ -276,26 +252,50 @@ public class FileTransferView extends ViewPart {
 		btn_search.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
+				remot_allDirectoryList = new ArrayList<>();
 				TreeParent root = fileTF.remoteConnect(txt_host.getText(), txt_userName.getText(), txt_pwd.getText(), txt_port.getText());
 				TreeParent invisibleRoot = new TreeParent("", "");
 				invisibleRoot.addChild(root);
 				
-				remoteTRViewer.setContentProvider(new RomoteTreeViewContentProvider());
-				remoteTRViewer.setLabelProvider(new RemoteTreeViewLabelProvider(workbench));
+				remoteTRViewer.setContentProvider(new TreeViewContentProvider());
+				remoteTRViewer.setLabelProvider(new TreeViewLabelProvider(workbench));
 				remoteTRViewer.setInput(invisibleRoot);
 				remoteTRViewer.refresh();
 				
 				remoteTBViewer.setContentProvider(new ArrayContentProvider());
-				remoteTBViewer.setLabelProvider(new RemoteTableViewLabelProvider(workbench));
+				remoteTBViewer.setLabelProvider(new TableViewLabelProvider(workbench));
 				
-				allDirectoryList.addAll(fileTF.getFileModel());
+				remot_allDirectoryList.addAll(fileTF.getFileModel());
 //					remoteTBViewer.setInput(sfileTFpTest.getFileModel());
 				remoteTBViewer.refresh();
-				
 				remoteTBViewer.getControl().setFocus();
 			}
 		});
 		
+		tree_local.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				local_allDirectoryList = new ArrayList<>();
+				absolutePath = "";
+				TreeItem item = (TreeItem) e.item;
+				absoluteDirectory(item);
+				
+				absolutePath = absolutePath.replace("\\", "");
+				
+//				System.out.println(absolutePath);
+				local_allDirectoryList.addAll(fileTF.getFileDirectory(absolutePath));
+				
+				localTBViewer.setContentProvider(new ArrayContentProvider());
+				localTBViewer.setLabelProvider(new TableViewLabelProvider(workbench));
+				//표출할 디렉토리 리스트
+				localTBViewer.setInput(local_allDirectoryList);
+				localTBViewer.refresh();
+			}
+			
+		});
+		
+
 		tree_remote.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -303,10 +303,10 @@ public class FileTransferView extends ViewPart {
 				TreeItem item = (TreeItem) e.item;
 					
 					//표출할 디렉토리 리스트
-					List<TreeFileModel> directoryList = new ArrayList<>();
+					List<TreeFileModel> directoryList = new ArrayList<TreeFileModel>();
 					String path;
 					
-					for(TreeFileModel tfItem : allDirectoryList) {
+					for(TreeFileModel tfItem : remot_allDirectoryList) {
 						//경로 설정
 						path = tfItem.getPath().split("/")[tfItem.getPath().split("/").length - 1];
 						//선택된 폴더의 하위 디렉토리
@@ -316,79 +316,23 @@ public class FileTransferView extends ViewPart {
 					remoteTBViewer.setInput(directoryList);
 					remoteTBViewer.refresh();
 			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				super.widgetDefaultSelected(e);
-			}
 			
 		});
 		
 	}
-		private ImageDescriptor createImageDescriptor() {
-			Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
-			URL url = FileLocator.find(bundle, new Path("icons/folder.png"),null);
-			
-			return ImageDescriptor.createFromURL(url);
+	
+	private void absoluteDirectory(TreeItem item) {
+		
+		TreeItem parentItem = item.getParentItem();
+		String path = item.getText();
+		
+		if(parentItem == null || parentItem.equals(null)) {
+			absolutePath += path;
+		}else {
+			absoluteDirectory(parentItem);
+			absolutePath += "/" + item.getText();
 		}
-		
-		private void createColumns(final Composite parent, final TableViewer viewer) {
-	        String[] titles = { "File name", "Size", "Last Modified" };
-	        int[] bounds = { 100, 100, 100};
-
-	        // First column is for the first name
-	        TableViewerColumn col = createTableViewerColumn(titles[0], bounds[0], 0);
-	        col.setLabelProvider(new ColumnLabelProvider() {
-	            @Override
-	            public String getText(Object element) {
-	                FileModel p = (FileModel) element;
-	                return p.getFileName();
-	            }
-	        });
-
-	        // Second column is for the last name
-	        col = createTableViewerColumn(titles[1], bounds[1], 1);
-	        col.setLabelProvider(new ColumnLabelProvider() {
-	            @Override
-	            public String getText(Object element) {
-	                FileModel p = (FileModel) element;
-	                return p.getSize();
-	            }
-	        });
-
-	        // now the gender
-	        col = createTableViewerColumn(titles[2], bounds[2], 2);
-	        col.setLabelProvider(new ColumnLabelProvider() {
-	            @Override
-	            public String getText(Object element) {
-	                FileModel p = (FileModel) element;
-	                return p.getLastEdit();
-	            }
-	        });
-
-			/*
-			 * // now the status married col = createTableViewerColumn(titles[3], bounds[3],
-			 * 3); col.setLabelProvider(new ColumnLabelProvider() {
-			 * 
-			 * @Override public String getText(Object element) { return null; }
-			 * 
-			 * @Override public Image getImage(Object element) { if (((Person)
-			 * element).isMarried()) { return CHECKED; } else { return UNCHECKED; } } });
-			 */
-
-	    }
-		
-		private TableViewerColumn createTableViewerColumn(String title, int bound, final int colNumber) {
-	        final TableViewerColumn viewerColumn = new TableViewerColumn(localTBViewer,
-	                SWT.NONE);
-	        final TableColumn column = viewerColumn.getColumn();
-	        column.setText(title);
-	        column.setWidth(bound);
-	        column.setResizable(true);
-	        column.setMoveable(true);
-	        return viewerColumn;
-
-	    }
+	}
 
 	@Override
 	public void setFocus() {

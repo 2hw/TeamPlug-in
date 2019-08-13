@@ -1,5 +1,7 @@
 package org.inbus.teamfiletransferclient.core;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -18,7 +20,7 @@ public class FileTransfer {
 	
 	private ConnectionInfoModel connectionInfoModel = new ConnectionInfoModel();
 	private SFTPUtil util = new SFTPUtil();
-	private List<TreeFileModel> tfList = new ArrayList<>();
+	private List<TreeFileModel> tfList;
 	private String remoteHome = "/home/testuser";
 	
 	private String pattern = "(.+)\\s+(\\d+)\\s+(\\S+\\s+\\S+)\\s+(\\d+)\\s+(.+\\s+\\d+\\s+[\\d:]+)\\s+(.*)";
@@ -27,6 +29,7 @@ public class FileTransfer {
 	
 	
 	public TreeParent remoteConnect(String host, String userName, String password, String port) {
+		tfList = new ArrayList<TreeFileModel>();
 		
 		try {
 			checkConnectionInfo(host);
@@ -45,16 +48,15 @@ public class FileTransfer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		TreeParent rtTP = getTreeDirectory(remoteHome);
 		
-		return getTreeDirectory(remoteHome);
+		util.disconnection();
+
+		return rtTP;
 		
 	}
 	
-	
 	public TreeParent getTreeDirectory(String path) {
-
-//		System.out.println("=> Connected to 3322");
-        
 		String name = path.split("/")[path.split("/").length - 1];
 		
 		// 1. 파일 객체 생성 (path 정보를 가지는 파일 만듬)
@@ -69,7 +71,6 @@ public class FileTransfer {
 			if(tfm.isFolder())
 				retTP.addChild(getTreeDirectory(path + "/" + tfm.getName()));
 		}
-//        util.disconnection();
         
 		return retTP;
         
@@ -79,7 +80,7 @@ public class FileTransfer {
 	 * 경로에 대한 디렉토리 정보 가져오기
 	 * 
 	 * @param path 디렉토리 정보를 가져올 경로
-	 * @return {@linkplain DirectoryVO} 리스트
+	 * @return TreeFileModel 리스트
 	 */
 	
 	public List<TreeFileModel> getFileSystem(String path) {
@@ -112,19 +113,11 @@ public class FileTransfer {
 				
 				tfList.add(tfModel);
 				
-				if (!oListItem.getAttrs().isDir()) {
-					files.add(tfModel);
-					
-//					System.out.println(matcher.group(6) + "	파일입니다.");
-	
-				} else {
+				if (oListItem.getAttrs().isDir()) {
 					folders.add(tfModel);
-					
-//						System.out.println(oListItem.toString() + "	디렉토리입니다. " + "폴더명 : " + matcher.group(6));
-//						System.out.print("폴더명 : " + matcher.group(6));
-//						System.out.println("	재귀함수 파라미터 : " + path + "/" + matcher.group(6));
+				} else {
+					files.add(tfModel);
 				}
-				
 			}
         }
 		folders.addAll(files);
@@ -143,6 +136,32 @@ public class FileTransfer {
 		}
 		
 		return valid;
+	}
+	
+	public List<TreeFileModel> getFileDirectory(String path) {
+		List<TreeFileModel> subDirectoryList = new ArrayList<TreeFileModel>();
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd E요일 a HH:mm:ss"); // 날짜 포맷을 지정
+
+		// 하위 디렉토리 
+        for (File info : new File(path).listFiles()) {
+        	TreeFileModel tfModel = new TreeFileModel
+        			(
+        			info.getName()
+        			, (int)info.length()
+        			, String.valueOf(sf.format(info.lastModified()))
+        			, path
+        			);
+        	
+            if (info.isDirectory()) {
+            	tfModel.setFolder(true);
+//                System.out.println("폴더 : " + info.getName());
+            }else if (info.isFile()) {
+            	tfModel.setFolder(false);
+//                System.out.println("파일 : " + info.getName());
+            }
+            subDirectoryList.add(tfModel);
+        }
+		return subDirectoryList;
 	}
 	
 }

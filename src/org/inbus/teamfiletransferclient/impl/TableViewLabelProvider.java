@@ -8,11 +8,11 @@ import org.eclipse.ui.IWorkbench;
 import org.inbus.teamfiletransferclient.model.TreeFileModel;
 
 
-public class RemoteTableViewLabelProvider implements ITableLabelProvider{
+public class TableViewLabelProvider implements ITableLabelProvider{
 
 	private IWorkbench workbench;
 	
-	public RemoteTableViewLabelProvider(IWorkbench workbench) {
+	public TableViewLabelProvider(IWorkbench workbench) {
 		this.workbench = workbench;
 	}
 	
