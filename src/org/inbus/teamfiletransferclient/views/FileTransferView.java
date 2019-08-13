@@ -154,26 +154,26 @@ public class FileTransferView extends ViewPart {
 		Combo combo_local = new Combo(group_local, SWT.NONE);
 		combo_local.setBounds(0, 30, 530, 30);
 		
-		//TreeView
+		//Local TreeViewer
 		localTRViewer = new TreeViewer(group_local, SWT.BORDER);
 		Tree tree_local = localTRViewer.getTree();
 		tree_local.setBounds(0, 64, 530, 205);
 		
-		//TreeView Provider
+		//Local TreeViewer Provider
         localTRViewer.setContentProvider(new TreeViewContentProvider());
         localTRViewer.setLabelProvider(new TreeViewLabelProvider(workbench));
         
-        //TreeViewer 데이터 설정
+        //Set data in Local TreeViewer
 	    localTRViewer.setInput(File.listRoots());
 	    localTRViewer.refresh();
 		
-	    //TableViewer
+	    //Local TableViewer
 	    localTBViewer = new TableViewer(group_local, SWT.BORDER | SWT.FULL_SELECTION);
-//	    createColumns(group_local, localTBViewer);
 		table_local = localTBViewer.getTable();
 		table_local.setHeaderVisible(true);
 		table_local.setBounds(0, 280, 530, 260);
 		
+		//Create Local Table Column Header
 		TableViewerColumn tableViewerColumn2 = new TableViewerColumn(localTBViewer, SWT.NONE);
 		TableColumn tblclmnNewColumn2 = tableViewerColumn2.getColumn();
 		tblclmnNewColumn2.setWidth(100);
@@ -189,11 +189,6 @@ public class FileTransferView extends ViewPart {
 		tblclmnNewColumn2_2.setWidth(100);
 		tblclmnNewColumn2_2.setText(trFileMD.COLUMN_HEADER[2]);
 		
-		//TableView Provider
-		
-		
-		
-		
 		Label label_localResult = new Label(group_local, SWT.NONE);
 		label_localResult.setBounds(0, 550, 530, 30);
 		
@@ -203,16 +198,19 @@ public class FileTransferView extends ViewPart {
 		Combo combo_remote = new Combo(group_remote, SWT.NONE);
 		combo_remote.setBounds(0, 30, 530, 30);
 		
+		//Remote TreeViewer
 		remoteTRViewer = new TreeViewer(group_remote, SWT.BORDER);
 		Tree tree_remote = remoteTRViewer.getTree();
 		tree_remote.setLocation(0, 64);
 		tree_remote.setSize(530, 205);
 		
+		//Remote TableViewer
 		remoteTBViewer = new TableViewer(group_remote, SWT.BORDER | SWT.FULL_SELECTION);
 		table_remote = remoteTBViewer.getTable();
 		table_remote.setHeaderVisible(true);
 		table_remote.setBounds(0, 280, 530, 260);
 		
+		//Create Remote Table Column Header
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(remoteTBViewer, SWT.NONE);
 		TableColumn tblclmnNewColumn = tableViewerColumn.getColumn();
 		tblclmnNewColumn.setWidth(100);
@@ -248,7 +246,7 @@ public class FileTransferView extends ViewPart {
 		table_file = tableViewer_1.getTable();
 		table_file.setBounds(0, 0, 1070, 90);
 
-		//사용자 정의 함수
+		//Create User Event Function
 		btn_search.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -266,7 +264,6 @@ public class FileTransferView extends ViewPart {
 				remoteTBViewer.setLabelProvider(new TableViewLabelProvider(workbench));
 				
 				remot_allDirectoryList.addAll(fileTF.getFileModel());
-//					remoteTBViewer.setInput(sfileTFpTest.getFileModel());
 				remoteTBViewer.refresh();
 				remoteTBViewer.getControl().setFocus();
 			}
@@ -280,15 +277,11 @@ public class FileTransferView extends ViewPart {
 				absolutePath = "";
 				TreeItem item = (TreeItem) e.item;
 				absoluteDirectory(item);
-				
 				absolutePath = absolutePath.replace("\\", "");
-				
-//				System.out.println(absolutePath);
 				local_allDirectoryList.addAll(fileTF.getFileDirectory(absolutePath));
-				
 				localTBViewer.setContentProvider(new ArrayContentProvider());
 				localTBViewer.setLabelProvider(new TableViewLabelProvider(workbench));
-				//표출할 디렉토리 리스트
+				//Print Directory List
 				localTBViewer.setInput(local_allDirectoryList);
 				localTBViewer.refresh();
 			}
@@ -301,15 +294,13 @@ public class FileTransferView extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TreeItem item = (TreeItem) e.item;
-					
-					//표출할 디렉토리 리스트
 					List<TreeFileModel> directoryList = new ArrayList<TreeFileModel>();
 					String path;
 					
 					for(TreeFileModel tfItem : remot_allDirectoryList) {
-						//경로 설정
+						//Setting Path
 						path = tfItem.getPath().split("/")[tfItem.getPath().split("/").length - 1];
-						//선택된 폴더의 하위 디렉토리
+						//Subdirectories of selected the folder
 						if(item.getText().equals(path))
 							directoryList.add(tfItem);
 					}
