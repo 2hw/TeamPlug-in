@@ -85,6 +85,7 @@ public class FileTransferView extends ViewPart {
 	private Table table_remote;
 	private Table table_file;
 	 
+
 	@Override
 	public void createPartControl(Composite parent) {
 		
