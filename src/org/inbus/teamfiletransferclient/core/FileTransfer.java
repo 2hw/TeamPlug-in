@@ -16,6 +16,7 @@ import org.inbus.teamfiletransferclient.model.TreeParent;
 
 import com.jcraft.jsch.ChannelSftp;
 
+
 public class FileTransfer {
 	
 	private ConnectionInfoModel connectionInfoModel = new ConnectionInfoModel();
