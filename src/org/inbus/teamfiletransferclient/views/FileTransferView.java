@@ -87,7 +87,6 @@ public class FileTransferView extends ViewPart {
 	 
 	
 	
-
 	@Override
 	public void createPartControl(Composite parent) {
 		
