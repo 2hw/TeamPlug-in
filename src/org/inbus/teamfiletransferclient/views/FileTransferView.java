@@ -151,8 +151,8 @@ public class FileTransferView extends ViewPart {
 		Group group_local = new Group(composite_main, SWT.NONE);
 		group_local.setText("로컬 사이트");
 		
-		Combo combo_local = new Combo(group_local, SWT.NONE);
-		combo_local.setBounds(0, 30, 530, 30);
+		Combo combo_localPath = new Combo(group_local, SWT.NONE);
+		combo_localPath.setBounds(0, 30, 530, 30);
 		
 		//TreeView
 		localTRViewer = new TreeViewer(group_local, SWT.BORDER);
@@ -200,8 +200,8 @@ public class FileTransferView extends ViewPart {
 		Group group_remote = new Group(composite_main, SWT.NONE);
 		group_remote.setText("리모트 사이트");
 		
-		Combo combo_remote = new Combo(group_remote, SWT.NONE);
-		combo_remote.setBounds(0, 30, 530, 30);
+		Combo combo_remotePath = new Combo(group_remote, SWT.NONE);
+		combo_remotePath.setBounds(0, 30, 530, 30);
 		
 		remoteTRViewer = new TreeViewer(group_remote, SWT.BORDER);
 		Tree tree_remote = remoteTRViewer.getTree();
@@ -282,6 +282,9 @@ public class FileTransferView extends ViewPart {
 				absoluteDirectory(item);
 				
 				absolutePath = absolutePath.replace("\\", "");
+				
+				// 콤보박스 로컬 경로
+				combo_localPath.setText(absolutePath);
 				
 //				System.out.println(absolutePath);
 				local_allDirectoryList.addAll(fileTF.getFileDirectory(absolutePath));
