@@ -165,4 +165,12 @@ public class FileTransfer {
 		return subDirectoryList;
 	}
 	
+	public boolean fileUpload(String filePath) {
+		
+		File uploadFile = new File(filePath);
+		
+//		util.upload(dir, uploadFile);
+		return true;
+	}
+	
 }

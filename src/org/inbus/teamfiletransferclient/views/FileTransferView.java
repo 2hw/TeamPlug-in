@@ -7,7 +7,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -23,12 +30,17 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.inbus.teamfiletransferclient.core.FileTransfer;
 import org.inbus.teamfiletransferclient.impl.TableViewLabelProvider;
@@ -84,6 +96,9 @@ public class FileTransferView extends ViewPart {
 	private Table table_local;
 	private Table table_remote;
 	private Table table_file;
+	
+	private Action action1;
+	private Action action2;
 	 
 
 	@Override
@@ -292,7 +307,6 @@ public class FileTransferView extends ViewPart {
 			
 		});
 		
-
 		tree_remote.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -306,6 +320,7 @@ public class FileTransferView extends ViewPart {
 						path = tfItem.getPath().split("/")[tfItem.getPath().split("/").length - 1];
 						//Subdirectories of selected the folder
 						if(item.getText().equals(path))
+							System.out.println(tfItem.getPath());
 							directoryList.add(tfItem);
 					}
 					remoteTBViewer.setInput(directoryList);
@@ -314,6 +329,63 @@ public class FileTransferView extends ViewPart {
 			
 		});
 		
+		
+		// Create the help context id for the viewer's control
+		workbench.getHelpSystem().setHelp(localTBViewer.getControl(), "FileTransferView.localTBViewer");
+		getSite().setSelectionProvider(localTBViewer);
+		makeActions();
+		hookContextMenu();
+	}
+	
+	private void hookContextMenu() {
+		MenuManager menuMgr = new MenuManager("#PopupMenu");
+		menuMgr.setRemoveAllWhenShown(true);
+		menuMgr.addMenuListener(new IMenuListener() {
+			@Override
+			public void menuAboutToShow(IMenuManager manager) {
+				FileTransferView.this.fillContextMenu(manager);
+			}
+		});
+		Menu menu = menuMgr.createContextMenu(localTBViewer.getControl());
+		localTBViewer.getControl().setMenu(menu);
+		getSite().registerContextMenu(menuMgr, localTBViewer);
+	}
+	
+	private void fillContextMenu(IMenuManager manager) {
+		manager.add(action1);
+		manager.add(action2);
+		// Other plug-ins can contribute there actions here
+		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+	}
+	
+	private void makeActions() {
+		action1 = new Action() {
+			public void run() {
+				//File upload
+				
+			}
+		};
+		action1.setText("파일 업로드");
+		action1.setToolTipText("Action 1 tooltip");
+		action1.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
+			getImageDescriptor(ISharedImages.IMG_TOOL_UP));
+		
+		action2 = new Action() {
+			public void run() {
+				//File download
+			}
+		};
+		action2.setText("파일 다운로드");
+		action2.setToolTipText("Action 2 tooltip");
+		action2.setImageDescriptor(workbench.getSharedImages().
+				getImageDescriptor(ISharedImages.IMG_OBJS_DND_BOTTOM_SOURCE));
+//		doubleClickAction = new Action() {
+//			public void run() {
+//				IStructuredSelection selection = viewer.getStructuredSelection();
+//				Object obj = selection.getFirstElement();
+//				showMessage("Double-click detected on "+obj.toString());
+//			}
+//		};
 	}
 	
 	private void absoluteDirectory(TreeItem item) {
