@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
@@ -87,6 +88,8 @@ public class FileTransferView extends ViewPart {
 	private List<TreeFileModel> remot_allDirectoryList;
 	private List<TreeFileModel> local_allDirectoryList;
 	private String absolutePath = "";
+	private String localSelectedTBItem = "";
+	private String remoteSelectedTRPath = "";
 	
 	@Inject IWorkbench workbench;
 	private Text txt_host;
@@ -295,14 +298,23 @@ public class FileTransferView extends ViewPart {
 				// 콤보박스 로컬 경로
 				combo_localPath.setText(absolutePath);
 				
-//				System.out.println(absolutePath);
-
 				local_allDirectoryList.addAll(fileTF.getFileDirectory(absolutePath));
 				localTBViewer.setContentProvider(new ArrayContentProvider());
 				localTBViewer.setLabelProvider(new TableViewLabelProvider(workbench));
 				//Print Directory List
 				localTBViewer.setInput(local_allDirectoryList);
 				localTBViewer.refresh();
+			}
+			
+		});
+		
+		table_local.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				TableItem tableItem = (TableItem) e.item;
+				TreeFileModel fileModel = (TreeFileModel) tableItem.getData();
+				localSelectedTBItem = fileModel.getPath() + "/" + fileModel.getName();
 			}
 			
 		});
@@ -318,17 +330,17 @@ public class FileTransferView extends ViewPart {
 					for(TreeFileModel tfItem : remot_allDirectoryList) {
 						//Setting Path
 						path = tfItem.getPath().split("/")[tfItem.getPath().split("/").length - 1];
-						//Subdirectories of selected the folder
-						if(item.getText().equals(path))
-							System.out.println(tfItem.getPath());
+						remoteSelectedTRPath = tfItem.getPath();
+						//SubDirectories of selected the folder
+						if(item.getText().equals(path)) {
 							directoryList.add(tfItem);
+						}
 					}
 					remoteTBViewer.setInput(directoryList);
 					remoteTBViewer.refresh();
 			}
 			
 		});
-		
 		
 		// Create the help context id for the viewer's control
 		workbench.getHelpSystem().setHelp(localTBViewer.getControl(), "FileTransferView.localTBViewer");
@@ -362,13 +374,11 @@ public class FileTransferView extends ViewPart {
 		action1 = new Action() {
 			public void run() {
 				//File upload
-				
+				if(!localSelectedTBItem.equals("") || localSelectedTBItem != "")
+					fileTF.fileUpload(remoteSelectedTRPath, localSelectedTBItem);
 			}
 		};
 		action1.setText("파일 업로드");
-		action1.setToolTipText("Action 1 tooltip");
-		action1.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
-			getImageDescriptor(ISharedImages.IMG_TOOL_UP));
 		
 		action2 = new Action() {
 			public void run() {
@@ -376,16 +386,6 @@ public class FileTransferView extends ViewPart {
 			}
 		};
 		action2.setText("파일 다운로드");
-		action2.setToolTipText("Action 2 tooltip");
-		action2.setImageDescriptor(workbench.getSharedImages().
-				getImageDescriptor(ISharedImages.IMG_OBJS_DND_BOTTOM_SOURCE));
-//		doubleClickAction = new Action() {
-//			public void run() {
-//				IStructuredSelection selection = viewer.getStructuredSelection();
-//				Object obj = selection.getFirstElement();
-//				showMessage("Double-click detected on "+obj.toString());
-//			}
-//		};
 	}
 	
 	private void absoluteDirectory(TreeItem item) {

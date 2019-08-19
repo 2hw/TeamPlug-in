@@ -51,7 +51,7 @@ public class FileTransfer {
 		}
 		TreeParent rtTP = getTreeDirectory(remoteHome);
 		
-		util.disconnection();
+//		util.disconnection();
 
 		return rtTP;
 		
@@ -165,11 +165,14 @@ public class FileTransfer {
 		return subDirectoryList;
 	}
 	
-	public boolean fileUpload(String filePath) {
+	public boolean fileUpload(String serverPath, String filePath) {
 		
 		File uploadFile = new File(filePath);
-		
-//		util.upload(dir, uploadFile);
+		try {
+			util.upload(serverPath, uploadFile);
+		} catch (Exception e) {
+			return false;
+		}
 		return true;
 	}
 	
