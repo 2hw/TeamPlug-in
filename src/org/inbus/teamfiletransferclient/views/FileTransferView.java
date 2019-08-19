@@ -10,11 +10,9 @@ import javax.inject.Inject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -37,17 +35,15 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.inbus.teamfiletransferclient.core.FileTransfer;
 import org.inbus.teamfiletransferclient.impl.TableViewLabelProvider;
 import org.inbus.teamfiletransferclient.impl.TreeViewContentProvider;
 import org.inbus.teamfiletransferclient.impl.TreeViewLabelProvider;
-import org.inbus.teamfiletransferclient.model.TreeFileModel;
+import org.inbus.teamfiletransferclient.model.DirectoryModel;
+import org.inbus.teamfiletransferclient.model.FileTransferModel;
 import org.inbus.teamfiletransferclient.model.TreeParent;
 
 
@@ -84,12 +80,14 @@ public class FileTransferView extends ViewPart {
 	private TableViewer remoteTBViewer;
 	
 	private FileTransfer fileTF = new FileTransfer();
-	private TreeFileModel trFileMD;
-	private List<TreeFileModel> remot_allDirectoryList;
-	private List<TreeFileModel> local_allDirectoryList;
+	private DirectoryModel trFileMD;
+	private List<DirectoryModel> remot_allDirectoryList;
+	private List<DirectoryModel> local_allDirectoryList;
 	private String absolutePath = "";
-	private String localSelectedTBItem = "";
-	private String remoteSelectedTRPath = "";
+	private String localSelectedPath = "";
+	private String remoteSelectedPath = "";
+	private String remoteSelectedFileName = "";
+	private FileTransferModel fileTransferModel = new FileTransferModel();
 	
 	@Inject IWorkbench workbench;
 	private Text txt_host;
@@ -297,6 +295,7 @@ public class FileTransferView extends ViewPart {
 				
 				// 콤보박스 로컬 경로
 				combo_localPath.setText(absolutePath);
+				fileTransferModel.setLocalPath(absolutePath);
 				
 				local_allDirectoryList.addAll(fileTF.getFileDirectory(absolutePath));
 				localTBViewer.setContentProvider(new ArrayContentProvider());
@@ -313,8 +312,10 @@ public class FileTransferView extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TableItem tableItem = (TableItem) e.item;
-				TreeFileModel fileModel = (TreeFileModel) tableItem.getData();
-				localSelectedTBItem = fileModel.getPath() + "/" + fileModel.getName();
+				DirectoryModel fileModel = (DirectoryModel) tableItem.getData();
+//				localSelectedPath = fileModel.getPath() + "/" + fileModel.getName();
+				fileTransferModel.setLocalFileName(fileModel.getName());
+				fileTransferModel.setLocalPath(fileModel.getPath());
 			}
 			
 		});
@@ -324,16 +325,17 @@ public class FileTransferView extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TreeItem item = (TreeItem) e.item;
-					List<TreeFileModel> directoryList = new ArrayList<TreeFileModel>();
+					List<DirectoryModel> directoryList = new ArrayList<DirectoryModel>();
 					String path;
 					
-					for(TreeFileModel tfItem : remot_allDirectoryList) {
+					for(DirectoryModel tfItem : remot_allDirectoryList) {
 						//Setting Path
 						path = tfItem.getPath().split("/")[tfItem.getPath().split("/").length - 1];
-						remoteSelectedTRPath = tfItem.getPath();
+//						remoteSelectedPath = tfItem.getPath();
 						//SubDirectories of selected the folder
 						if(item.getText().equals(path)) {
 							directoryList.add(tfItem);
+							fileTransferModel.setRemotePath(tfItem.getPath());
 						}
 					}
 					remoteTBViewer.setInput(directoryList);
@@ -342,14 +344,28 @@ public class FileTransferView extends ViewPart {
 			
 		});
 		
+		table_remote.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				TableItem tableItem = (TableItem) e.item;
+				DirectoryModel fileModel = (DirectoryModel) tableItem.getData();
+//				remoteSelectedFileName = fileModel.getName();
+				fileTransferModel.setRemoteFileName(fileModel.getName());
+			}
+		});
+		
 		// Create the help context id for the viewer's control
 		workbench.getHelpSystem().setHelp(localTBViewer.getControl(), "FileTransferView.localTBViewer");
 		getSite().setSelectionProvider(localTBViewer);
+		workbench.getHelpSystem().setHelp(remoteTBViewer.getControl(), "FileTransferView.remoteTBViewer");
+		getSite().setSelectionProvider(remoteTBViewer);
 		makeActions();
-		hookContextMenu();
+		localhookContextMenu();
+		remotehookContextMenu();
 	}
 	
-	private void hookContextMenu() {
+	private void localhookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
@@ -365,6 +381,25 @@ public class FileTransferView extends ViewPart {
 	
 	private void fillContextMenu(IMenuManager manager) {
 		manager.add(action1);
+		// Other plug-ins can contribute there actions here
+		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+	}
+	
+	private void remotehookContextMenu() {
+		MenuManager menuMgr = new MenuManager("#PopupMenu");
+		menuMgr.setRemoveAllWhenShown(true);
+		menuMgr.addMenuListener(new IMenuListener() {
+			@Override
+			public void menuAboutToShow(IMenuManager manager) {
+				FileTransferView.this.remotefillContextMenu(manager);
+			}
+		});
+		Menu menu = menuMgr.createContextMenu(remoteTBViewer.getControl());
+		remoteTBViewer.getControl().setMenu(menu);
+		getSite().registerContextMenu(menuMgr, remoteTBViewer);
+	}
+	
+	private void remotefillContextMenu(IMenuManager manager) {
 		manager.add(action2);
 		// Other plug-ins can contribute there actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
@@ -374,8 +409,7 @@ public class FileTransferView extends ViewPart {
 		action1 = new Action() {
 			public void run() {
 				//File upload
-				if(!localSelectedTBItem.equals("") || localSelectedTBItem != "")
-					fileTF.fileUpload(remoteSelectedTRPath, localSelectedTBItem);
+				fileTF.utilfunction("upload", fileTransferModel);
 			}
 		};
 		action1.setText("파일 업로드");
@@ -383,6 +417,7 @@ public class FileTransferView extends ViewPart {
 		action2 = new Action() {
 			public void run() {
 				//File download
+				fileTF.utilfunction("download", fileTransferModel);
 			}
 		};
 		action2.setText("파일 다운로드");

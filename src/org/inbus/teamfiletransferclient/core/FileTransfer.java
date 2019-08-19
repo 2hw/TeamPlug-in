@@ -8,10 +8,13 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.inbus.teamfiletransferclient.exceptions.InvalidServerInformationException;
+import org.inbus.teamfiletransferclient.exceptions.InvalidUtilInformationException;
 import org.inbus.teamfiletransferclient.impl.SFTPUtil;
 import org.inbus.teamfiletransferclient.model.ConnectionInfoModel;
-import org.inbus.teamfiletransferclient.model.TreeFileModel;
+import org.inbus.teamfiletransferclient.model.DirectoryModel;
+import org.inbus.teamfiletransferclient.model.FileTransferModel;
 import org.inbus.teamfiletransferclient.model.TreeParent;
 
 import com.jcraft.jsch.ChannelSftp;
@@ -21,7 +24,7 @@ public class FileTransfer {
 	
 	private ConnectionInfoModel connectionInfoModel = new ConnectionInfoModel();
 	private SFTPUtil util = new SFTPUtil();
-	private List<TreeFileModel> tfList;
+	private List<DirectoryModel> tfList;
 	private String remoteHome = "/home/testuser";
 	
 	private String pattern = "(.+)\\s+(\\d+)\\s+(\\S+\\s+\\S+)\\s+(\\d+)\\s+(.+\\s+\\d+\\s+[\\d:]+)\\s+(.*)";
@@ -30,7 +33,7 @@ public class FileTransfer {
 	
 	
 	public TreeParent remoteConnect(String host, String userName, String password, String port) {
-		tfList = new ArrayList<TreeFileModel>();
+		tfList = new ArrayList<DirectoryModel>();
 		
 		try {
 			checkConnectionInfo(host);
@@ -65,9 +68,9 @@ public class FileTransfer {
 		
 		TreeParent retTP = new TreeParent(name, path);
 		
-		List<TreeFileModel> TFMList = getFileSystem(path);
+		List<DirectoryModel> TFMList = getFileSystem(path);
 		
-		for(TreeFileModel tfm : TFMList) {
+		for(DirectoryModel tfm : TFMList) {
 			
 			if(tfm.isFolder())
 				retTP.addChild(getTreeDirectory(path + "/" + tfm.getName()));
@@ -84,10 +87,10 @@ public class FileTransfer {
 	 * @return TreeFileModel 리스트
 	 */
 	
-	public List<TreeFileModel> getFileSystem(String path) {
+	public List<DirectoryModel> getFileSystem(String path) {
 		
-		List<TreeFileModel> folders = new ArrayList<TreeFileModel>();	// 폴더 리스트
-		List<TreeFileModel> files = new ArrayList<TreeFileModel>();		// 파일 리스트
+		List<DirectoryModel> folders = new ArrayList<DirectoryModel>();	// 폴더 리스트
+		List<DirectoryModel> files = new ArrayList<DirectoryModel>();		// 파일 리스트
 		
 		Vector<ChannelSftp.LsEntry> list = util.getFileList(path);
 		
@@ -103,7 +106,7 @@ public class FileTransfer {
 				if(matcher.group(6).equals(".") || matcher.group(6).equals(".."))
 					break;
 				
-				TreeFileModel tfModel = new TreeFileModel(
+				DirectoryModel tfModel = new DirectoryModel(
 						matcher.group(6),		// name
         				Integer.parseInt(matcher.group(4)),	// size
         				matcher.group(5),	// modified date
@@ -125,7 +128,7 @@ public class FileTransfer {
 		return folders;
 	}
 	
-	public List<TreeFileModel> getFileModel() {
+	public List<DirectoryModel> getFileModel() {
 		return tfList;
 	}
 	
@@ -139,13 +142,13 @@ public class FileTransfer {
 		return valid;
 	}
 	
-	public List<TreeFileModel> getFileDirectory(String path) {
-		List<TreeFileModel> subDirectoryList = new ArrayList<TreeFileModel>();
+	public List<DirectoryModel> getFileDirectory(String path) {
+		List<DirectoryModel> subDirectoryList = new ArrayList<DirectoryModel>();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd E요일 a HH:mm:ss"); // 날짜 포맷을 지정
 
 		// 하위 디렉토리 
         for (File info : new File(path).listFiles()) {
-        	TreeFileModel tfModel = new TreeFileModel
+        	DirectoryModel tfModel = new DirectoryModel
         			(
         			info.getName()
         			, (int)info.length()
@@ -165,13 +168,32 @@ public class FileTransfer {
 		return subDirectoryList;
 	}
 	
-	public boolean fileUpload(String serverPath, String filePath) {
-		
-		File uploadFile = new File(filePath);
+	public void utilfunction(String selectAction, FileTransferModel fileTransferModel) {
 		try {
-			util.upload(serverPath, uploadFile);
+			if(checkBlank(fileTransferModel.getRemotePath(), fileTransferModel.getLocalPath())) {
+				
+				switch (selectAction) {
+				case "upload":
+					File uploadFile = new File(fileTransferModel.getLocalPath() + "/" + fileTransferModel.getLocalFileName());
+					util.upload(fileTransferModel.getRemotePath(), uploadFile);
+					break;
+
+				case "download":
+//					util.download(저장할 경로(서버), 다운로드할 파일, 저장될 공간);
+					util.download(fileTransferModel.getRemotePath(), fileTransferModel.getRemoteFileName(), fileTransferModel.getLocalPath());
+					break;
+				}
+			}
 		} catch (Exception e) {
-			return false;
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public boolean checkBlank(String remotePath, String localPath)  throws Exception {
+		if(StringUtils.isBlank(remotePath) || StringUtils.isBlank(localPath)) {
+			throw new InvalidUtilInformationException(String.valueOf("serverPath : " + remotePath + " filePath : " + localPath));
 		}
 		return true;
 	}

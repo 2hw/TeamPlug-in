@@ -1,6 +1,6 @@
 package org.inbus.teamfiletransferclient.model;
 
-public class TreeFileModel {
+public class DirectoryModel {
 	
 	private String name;
 	private int size;
@@ -12,7 +12,7 @@ public class TreeFileModel {
 	
 	public static String[] COLUMN_HEADER = new String[] {"파일명", "크기", "최종수정" ,"권한", "소유자/그룹"};
 	
-	public TreeFileModel(String name, int size, String modified_date, String permission,
+	public DirectoryModel(String name, int size, String modified_date, String permission,
 			String user_group, String path) {
 		super();
 		this.name = name;
@@ -29,7 +29,7 @@ public class TreeFileModel {
 		this.path = path;
 	}
 	
-	public TreeFileModel(String name, int size, String modified_date, String path) {
+	public DirectoryModel(String name, int size, String modified_date, String path) {
 		super();
 		this.name = name;
 		this.size = size;

@@ -12,4 +12,5 @@ Automatic-Module-Name: TeamFileTransferClient;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .,
  swing2swt.jar,
- lib/jsch-0.1.55.jar
+ lib/jsch-0.1.55.jar,
+ lib/commons-lang-2.6.jar

@@ -5,7 +5,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
-import org.inbus.teamfiletransferclient.model.TreeFileModel;
+import org.inbus.teamfiletransferclient.model.DirectoryModel;
 
 
 public class TableViewLabelProvider implements ITableLabelProvider{
@@ -33,7 +33,7 @@ public class TableViewLabelProvider implements ITableLabelProvider{
 	@Override
 	public Image getColumnImage(Object element, int idx) {
 		
-		TreeFileModel treeFileModel = (TreeFileModel) element;
+		DirectoryModel treeFileModel = (DirectoryModel) element;
 		String imageKey ="";
 		
 		switch (idx) {
@@ -50,7 +50,7 @@ public class TableViewLabelProvider implements ITableLabelProvider{
 
 	@Override
 	public String getColumnText(Object element, int idx) {
-		TreeFileModel treeFileModel = (TreeFileModel) element;
+		DirectoryModel treeFileModel = (DirectoryModel) element;
 		switch (idx) {
 		case 0:
 				return treeFileModel.getName();

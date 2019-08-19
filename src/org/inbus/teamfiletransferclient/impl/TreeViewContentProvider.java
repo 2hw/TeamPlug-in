@@ -34,22 +34,17 @@ public class TreeViewContentProvider implements ITreeContentProvider {
 		if (parent instanceof TreeParent) {
 			return ((TreeParent)parent).getChildren();
         }else if (parent instanceof File) {
-            File file = (File) parent;
+            List<File> childs = new ArrayList<File>();
             
-            if(parent instanceof File) {
-                List<File> childs = new ArrayList<File>();
-                
-                File[] files = ((File)parent).listFiles();
-                   
-                   if(files != null) {
-                       for(File fItem : files) {
-                           if(fItem.isDirectory())
-                               childs.add(fItem);
-                       }
+            File[] files = ((File)parent).listFiles();
+               
+               if(files != null) {
+                   for(File fItem : files) {
+                       if(fItem.isDirectory())
+                           childs.add(fItem);
                    }
-                   return childs.toArray() == null ? new Object[0] : childs.toArray();
-            }
-            return file.listFiles();
+               }
+               return childs.toArray() == null ? new Object[0] : childs.toArray();
        }
        return new Object[0];
    }

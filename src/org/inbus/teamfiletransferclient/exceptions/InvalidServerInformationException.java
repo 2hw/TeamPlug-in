@@ -9,4 +9,5 @@ public class InvalidServerInformationException extends Exception{
 	public InvalidServerInformationException(String message) {
 		super("Server Connection Information " + message + "  is not valid.");
 	}
+
 }
