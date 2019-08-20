@@ -84,9 +84,6 @@ public class FileTransferView extends ViewPart {
 	private List<DirectoryModel> remot_allDirectoryList;
 	private List<DirectoryModel> local_allDirectoryList;
 	private String absolutePath = "";
-	private String localSelectedPath = "";
-	private String remoteSelectedPath = "";
-	private String remoteSelectedFileName = "";
 	private FileTransferModel fileTransferModel = new FileTransferModel();
 	
 	@Inject IWorkbench workbench;
@@ -313,7 +310,6 @@ public class FileTransferView extends ViewPart {
 			public void widgetSelected(SelectionEvent e) {
 				TableItem tableItem = (TableItem) e.item;
 				DirectoryModel fileModel = (DirectoryModel) tableItem.getData();
-//				localSelectedPath = fileModel.getPath() + "/" + fileModel.getName();
 				fileTransferModel.setLocalFileName(fileModel.getName());
 				fileTransferModel.setLocalPath(fileModel.getPath());
 			}
@@ -331,7 +327,6 @@ public class FileTransferView extends ViewPart {
 					for(DirectoryModel tfItem : remot_allDirectoryList) {
 						//Setting Path
 						path = tfItem.getPath().split("/")[tfItem.getPath().split("/").length - 1];
-//						remoteSelectedPath = tfItem.getPath();
 						//SubDirectories of selected the folder
 						if(item.getText().equals(path)) {
 							directoryList.add(tfItem);
@@ -350,7 +345,6 @@ public class FileTransferView extends ViewPart {
 			public void widgetSelected(SelectionEvent e) {
 				TableItem tableItem = (TableItem) e.item;
 				DirectoryModel fileModel = (DirectoryModel) tableItem.getData();
-//				remoteSelectedFileName = fileModel.getName();
 				fileTransferModel.setRemoteFileName(fileModel.getName());
 			}
 		});

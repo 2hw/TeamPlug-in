@@ -147,8 +147,10 @@ public class FileTransfer {
 		List<DirectoryModel> subDirectoryList = new ArrayList<DirectoryModel>();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd E요일 a HH:mm:ss"); // 날짜 포맷을 지정
 
+		File[] fileList =  new File(path + "/").listFiles();
+		
 		// 하위 디렉토리 
-        for (File info : new File(path).listFiles()) {
+        for (File info : fileList) {
         	DirectoryModel tfModel = new DirectoryModel
         			(
         			info.getName()
@@ -177,12 +179,12 @@ public class FileTransfer {
 				case "upload":
 					File uploadFile = new File(fileTransferModel.getLocalPath() + "/" + fileTransferModel.getLocalFileName());
 					util.upload(fileTransferModel.getRemotePath(), uploadFile);
-					System.out.println("=> File uploading success to " + fileTransferModel.getLocalFileName());
+					System.out.println("=> File uploading success the " + fileTransferModel.getLocalFileName());
 					break;
 
 				case "download":
 					util.download(fileTransferModel.getRemotePath(), fileTransferModel.getRemoteFileName(), fileTransferModel.getLocalPath());
-					System.out.println("=> File downloading success to " + fileTransferModel.getRemoteFileName());
+					System.out.println("=> File downloading success the " + fileTransferModel.getRemoteFileName());
 					break;
 				}
 			}
