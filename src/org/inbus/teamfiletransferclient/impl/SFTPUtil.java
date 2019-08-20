@@ -227,7 +227,7 @@ public class SFTPUtil{
 
         try {
 
-            out = new FileOutputStream(new File(path));
+            out = new FileOutputStream(new File(path + File.separator + downloadFileName));
 
             int i;
 

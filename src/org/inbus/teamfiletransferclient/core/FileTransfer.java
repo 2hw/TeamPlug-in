@@ -52,6 +52,7 @@ public class FileTransfer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("=> Connected to " + host);
 		TreeParent rtTP = getTreeDirectory(remoteHome);
 		
 //		util.disconnection();
@@ -176,11 +177,12 @@ public class FileTransfer {
 				case "upload":
 					File uploadFile = new File(fileTransferModel.getLocalPath() + "/" + fileTransferModel.getLocalFileName());
 					util.upload(fileTransferModel.getRemotePath(), uploadFile);
+					System.out.println("=> File uploading success to " + fileTransferModel.getLocalFileName());
 					break;
 
 				case "download":
-//					util.download(저장할 경로(서버), 다운로드할 파일, 저장될 공간);
 					util.download(fileTransferModel.getRemotePath(), fileTransferModel.getRemoteFileName(), fileTransferModel.getLocalPath());
+					System.out.println("=> File downloading success to " + fileTransferModel.getRemoteFileName());
 					break;
 				}
 			}
