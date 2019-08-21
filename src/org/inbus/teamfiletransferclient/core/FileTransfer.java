@@ -100,12 +100,11 @@ public class FileTransfer {
 		// 2. directory 객체의 내용이 폴더인지 파일인지 구분한다.
 
 		for(ChannelSftp.LsEntry oListItem : list) {
-			
 			matcher = ptrn.matcher(oListItem.toString());
 			while(matcher.find()) {
 			
 				if(matcher.group(6).equals(".") || matcher.group(6).equals(".."))
-					break;
+					continue;
 				
 				DirectoryModel tfModel = new DirectoryModel(
 						matcher.group(6),		// name
@@ -115,6 +114,17 @@ public class FileTransfer {
         				matcher.group(3),	// user/group
         				path		// path
 					);
+				if(matcher.group(6).contains(".")) {
+					String ext = getExtension(matcher.group(6));
+					if(ext != null)
+						tfModel.setExt(ext);
+//					String extension = ""; 
+//					if(!matcher.group(6).startsWith(".")) {
+//						extension = matcher.group(6).split(".")[matcher.group(6).split(".").length-1];
+//						if(extension != null)
+//							tfModel.setExt(extension);
+//					}
+				}
 				
 				tfList.add(tfModel);
 				
@@ -164,6 +174,11 @@ public class FileTransfer {
 //                System.out.println("폴더 : " + info.getName());
             }else if (info.isFile()) {
             	tfModel.setFolder(false);
+            	if(info.getName().contains(".")) {
+            		String ext = getExtension(info.getName());
+					if(ext != null)
+						tfModel.setExt(ext);
+            	}
 //                System.out.println("파일 : " + info.getName());
             }
             subDirectoryList.add(tfModel);
@@ -194,6 +209,11 @@ public class FileTransfer {
 		}
 	}
 	
+	private String getExtension(String fileName) {
+		int pos = fileName.lastIndexOf( "." );
+		String ext = fileName.substring( pos + 1 );
+		return ext;
+	}
 	
 	public boolean checkBlank(String remotePath, String localPath)  throws Exception {
 		if(StringUtils.isBlank(remotePath) || StringUtils.isBlank(localPath)) {

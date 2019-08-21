@@ -39,6 +39,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.part.ViewPart;
 import org.inbus.teamfiletransferclient.core.FileTransfer;
+import org.inbus.teamfiletransferclient.impl.TableColumnLabelProvider;
 import org.inbus.teamfiletransferclient.impl.TableViewLabelProvider;
 import org.inbus.teamfiletransferclient.impl.TreeViewContentProvider;
 import org.inbus.teamfiletransferclient.impl.TreeViewLabelProvider;
