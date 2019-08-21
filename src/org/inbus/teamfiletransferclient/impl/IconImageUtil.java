@@ -15,6 +15,16 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
+import org.inbus.teamfiletransferclient.views.None;
+
+/**
+* TableViewer에 아이콘을 나타냄
+* System icon을 읽어들여 image 데이터를 생성
+* 
+* @author lhw
+* @version 1.0
+* @since 2019.08.06
+*/
 
 public class IconImageUtil {
 

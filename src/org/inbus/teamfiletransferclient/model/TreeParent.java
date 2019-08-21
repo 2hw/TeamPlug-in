@@ -2,6 +2,15 @@ package org.inbus.teamfiletransferclient.model;
 
 import java.util.ArrayList;
 
+/**
+* TreeParent Model
+* 하위 Tree Model
+* 
+* @author lhw
+* @version 1.0
+* @since 2019.08.06
+*/
+
 public class TreeParent extends TreeObject {
 	
 	private ArrayList<Object> children;

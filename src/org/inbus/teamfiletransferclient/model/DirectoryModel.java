@@ -1,15 +1,24 @@
 package org.inbus.teamfiletransferclient.model;
 
+/**
+* Remote Directory Model
+* 접속한 서버의 디렉토리를 담는 Model (Folder or File)
+* 
+* @author lhw
+* @version 1.0
+* @since 2019.08.06
+*/
+
 public class DirectoryModel {
 	
-	private String name;
-	private int size;
-	private boolean isFolder;
-	private String modified_date;
-	private String permission;
-	private String user_group;
-	private String path;
-	private String ext;
+	private String name;			//이름 
+	private int size;				//크기 
+	private boolean isFolder;		//폴더 : true (구분용도)
+	private String modified_date;	//최종 수정 시간
+	private String permission;		//권한
+	private String user_group;		//유저그룹
+	private String path;			//경로
+	private String ext;				//확장자
 	
 	public static String[] COLUMN_HEADER = new String[] {"파일명", "크기", "최종수정" ,"권한", "소유자/그룹"};
 	

@@ -1,10 +1,19 @@
 package org.inbus.teamfiletransferclient.model;
 
+/**
+* File Transfer Model
+* 접속한 서버의 파일 업로드 및 다운로드의 정보를 담는 Model
+* 
+* @author lhw
+* @version 1.0
+* @since 2019.08.06
+*/
+
 public class FileTransferModel {
-	private String remotePath;
-	private String remoteFileName;
-	private String localPath;
-	private String localFileName;
+	private String remotePath;		//업로드할 곳의 경로
+	private String remoteFileName;	//다운받을 파일명
+	private String localPath;		//다운받을 곳의 경로
+	private String localFileName;	//업로드할 파일명
 	
 	public String getRemotePath() {
 		return remotePath;

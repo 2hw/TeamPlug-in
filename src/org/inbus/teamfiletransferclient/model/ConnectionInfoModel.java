@@ -1,11 +1,22 @@
 package org.inbus.teamfiletransferclient.model;
 
+import org.inbus.teamfiletransferclient.views.None;
+
+/**
+* FTP 접속 정보 Model
+* 접속하려는 서버의 정보를 담는 Model
+* 
+* @author lhw
+* @version 1.0
+* @since 2019.08.06
+*/
+
 public class ConnectionInfoModel {
 	
-	private String host;
-	private String userName;
-	private String password;
-	private int port;
+	private String host;		//호스트
+	private String userName;	//사용자명
+	private String password;	//비밀번호
+	private int port;			//포트번호
 	
 	public ConnectionInfoModel() {
 	}

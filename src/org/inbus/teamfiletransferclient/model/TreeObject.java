@@ -2,6 +2,15 @@ package org.inbus.teamfiletransferclient.model;
 
 import org.eclipse.core.runtime.IAdaptable;
 
+/**
+* TreeObject Model
+* Tree에 넣는 Model
+* 
+* @author lhw
+* @version 1.0
+* @since 2019.08.06
+*/
+
 public class TreeObject implements IAdaptable {
 	private String name;
 	private TreeParent parent;
