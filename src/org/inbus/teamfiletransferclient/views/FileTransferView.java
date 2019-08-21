@@ -39,7 +39,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.part.ViewPart;
 import org.inbus.teamfiletransferclient.core.FileTransfer;
-import org.inbus.teamfiletransferclient.impl.TableColumnLabelProvider;
 import org.inbus.teamfiletransferclient.impl.TableViewLabelProvider;
 import org.inbus.teamfiletransferclient.impl.TreeViewContentProvider;
 import org.inbus.teamfiletransferclient.impl.TreeViewLabelProvider;
@@ -83,7 +82,7 @@ public class FileTransferView extends ViewPart {
 	private FileTransfer fileTF = new FileTransfer();
 	private DirectoryModel trFileMD;
 	private List<DirectoryModel> remot_allDirectoryList;
-	private List<DirectoryModel> local_allDirectoryList;
+	private List<File> local_allDirectoryList;
 	private String absolutePath = "";
 	private FileTransferModel fileTransferModel = new FileTransferModel();
 	
@@ -298,12 +297,12 @@ public class FileTransferView extends ViewPart {
 				fileTransferModel.setLocalPath(absolutePath);
 				
 				// Path Log
-				int num = 0;
-				combo_localPath.add(absolutePath, num++);
-				
-				if(combo_localPath.getItem(num).equals(absolutePath)) {
-					combo_localPath.remove(absolutePath);
-				}
+//				int num = 0;
+//				combo_localPath.add(absolutePath, num++);
+//				
+//				if(combo_localPath.getItem(num).equals(absolutePath)) {
+//					combo_localPath.remove(absolutePath);
+//				}
 				
 				
 				local_allDirectoryList.addAll(fileTF.getFileDirectory(absolutePath));
@@ -341,12 +340,12 @@ public class FileTransferView extends ViewPart {
 				combo_remotePath.setText(treePath);
 
 				// Path Log
-				int num = 0;
-				combo_remotePath.add(treePath, num++);
-				
-				if(combo_remotePath.getItem(num).equals(treePath)) {
-					combo_remotePath.remove(num);
-				}
+//				int num = 0;
+//				combo_remotePath.add(treePath, num++);
+//				
+//				if(combo_remotePath.getItem(num).equals(treePath)) {
+//					combo_remotePath.remove(num);
+//				}
 				
 				List<DirectoryModel> directoryList = new ArrayList<DirectoryModel>();
 				String path;

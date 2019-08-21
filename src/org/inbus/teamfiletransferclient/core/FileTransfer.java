@@ -115,15 +115,11 @@ public class FileTransfer {
         				path		// path
 					);
 				if(matcher.group(6).contains(".")) {
-					String ext = getExtension(matcher.group(6));
-					if(ext != null)
-						tfModel.setExt(ext);
-//					String extension = ""; 
-//					if(!matcher.group(6).startsWith(".")) {
-//						extension = matcher.group(6).split(".")[matcher.group(6).split(".").length-1];
-//						if(extension != null)
-//							tfModel.setExt(extension);
-//					}
+					if(matcher.group(6).indexOf(".") != 0) {
+						String ext = getExtension(matcher.group(6));
+						if(ext != null)
+							tfModel.setExt(ext);
+					}
 				}
 				
 				tfList.add(tfModel);
@@ -153,37 +149,17 @@ public class FileTransfer {
 		return valid;
 	}
 	
-	public List<DirectoryModel> getFileDirectory(String path) {
-		List<DirectoryModel> subDirectoryList = new ArrayList<DirectoryModel>();
-		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd E요일 a HH:mm:ss"); // 날짜 포맷을 지정
+	public List<File> getFileDirectory(String path) {
+		
+		List<File> subDirectory = new ArrayList<File>();
 
 		File[] fileList =  new File(path + "/").listFiles();
 		
 		// 하위 디렉토리 
         for (File info : fileList) {
-        	DirectoryModel tfModel = new DirectoryModel
-        			(
-        			info.getName()
-        			, (int)info.length()
-        			, String.valueOf(sf.format(info.lastModified()))
-        			, path
-        			);
-        	
-            if (info.isDirectory()) {
-            	tfModel.setFolder(true);
-//                System.out.println("폴더 : " + info.getName());
-            }else if (info.isFile()) {
-            	tfModel.setFolder(false);
-            	if(info.getName().contains(".")) {
-            		String ext = getExtension(info.getName());
-					if(ext != null)
-						tfModel.setExt(ext);
-            	}
-//                System.out.println("파일 : " + info.getName());
-            }
-            subDirectoryList.add(tfModel);
+            subDirectory.add(info);
         }
-		return subDirectoryList;
+		return subDirectory;
 	}
 	
 	public void utilfunction(String selectAction, FileTransferModel fileTransferModel) {

@@ -1,34 +1,24 @@
 package org.inbus.teamfiletransferclient.impl;
 
-import java.net.URL;
+import java.io.File;
+import java.text.SimpleDateFormat;
 
-import javax.swing.text.View;
-
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.resource.LocalResourceManager;
-import org.eclipse.jface.resource.ResourceManager;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.program.Program;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.internal.dialogs.ViewLabelProvider;
 import org.inbus.teamfiletransferclient.model.DirectoryModel;
-import org.inbus.teamfiletransferclient.views.FileTransferView;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
 
 
 public class TableViewLabelProvider implements ITableLabelProvider{
 
 	private IWorkbench workbench;
-	private final ImageDescriptor ZIP = getImageDescriptor("zip.png");
-	private ResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
-	
+	private SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd E요일 a HH:mm:ss"); // 날짜 포맷을 지정
 	
 	public TableViewLabelProvider(IWorkbench workbench) {
 		this.workbench = workbench;
@@ -50,21 +40,30 @@ public class TableViewLabelProvider implements ITableLabelProvider{
 
 	@Override
 	public Image getColumnImage(Object element, int idx) {
-		
-		DirectoryModel treeFileModel = (DirectoryModel) element;
 		String imageKey ="";
-		
 		switch (idx) {
 		case 0:
-			if(treeFileModel.isFolder()) {
-				imageKey = ISharedImages.IMG_OBJ_FOLDER;
-			}else{
-				switch (treeFileModel.getExt()) {
-				case "zip": case "7z" :
-					return resourceManager.createImage(ZIP);
-			default:
-				imageKey = ISharedImages.IMG_OBJ_FILE;
-//				break;
+			Display display = Display.getCurrent();
+			
+			if(element instanceof File) {
+				
+				File file = (File) element;
+				return IconImageUtil.getImage(display, file);
+				
+			}else if(element instanceof DirectoryModel) {
+				
+				DirectoryModel remoteFile = (DirectoryModel) element;
+				
+				if(remoteFile.isFolder()) {
+					imageKey = ISharedImages.IMG_OBJ_FOLDER;
+				}else {
+					imageKey = ISharedImages.IMG_OBJ_FILE;
+					if(!StringUtils.isBlank(remoteFile.getExt())) {
+						String fileEnding = remoteFile.getExt();
+						ImageData iconData = Program.findProgram(fileEnding).getImageData();
+						Image icon = new Image(display, iconData);
+						return icon;
+					}
 				}
 			}
 		}
@@ -73,26 +72,37 @@ public class TableViewLabelProvider implements ITableLabelProvider{
 
 	@Override
 	public String getColumnText(Object element, int idx) {
-		DirectoryModel treeFileModel = (DirectoryModel) element;
-		switch (idx) {
-		case 0:
+		
+		if(element instanceof File) {
+			
+			File file = (File) element;
+			
+			switch(idx) {
+			case 0:
+				return file.getName();
+			case 1:
+				return String.valueOf(file.length()); 
+			case 2:
+				return String.valueOf(sf.format(file.lastModified()));
+			}
+			
+		}else if(element instanceof DirectoryModel) {
+			
+			DirectoryModel treeFileModel = (DirectoryModel) element;
+
+			switch (idx) {
+			case 0:
 				return treeFileModel.getName();
-		case 1:
+			case 1:
 				return String.valueOf(treeFileModel.getSize());
-		case 2:
+			case 2:
 				return treeFileModel.getModified_date();
-		case 3:
+			case 3:
 				return treeFileModel.getPermission();
-		case 4:
+			case 4:
 				return treeFileModel.getUser_group();
+			}
 		}
 		return "";
 	}
-	
-	private static ImageDescriptor getImageDescriptor(String file) {
-	    Bundle bundle = FrameworkUtil.getBundle(FileTransferView.class);
-	    URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
-	    return ImageDescriptor.createFromURL(url);
-	}
-	
 }

@@ -61,9 +61,4 @@ public class TreeViewLabelProvider extends LabelProvider {
 		return resourceManager;
 	}
 
-	private String getFileName(File file) {
-		String name = file.getName();
-		return name.isEmpty() ? file.getPath() : name;
-	}
-
 }
