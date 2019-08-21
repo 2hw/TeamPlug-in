@@ -284,22 +284,35 @@ public class FileTransferView extends ViewPart {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				
 				local_allDirectoryList = new ArrayList<>();
 				absolutePath = "";
+				
 				TreeItem item = (TreeItem) e.item;
 				absoluteDirectory(item);
 				absolutePath = absolutePath.replace("\\", "");
 				
-				// 콤보박스 로컬 경로
+				// ComboBox Local Path
 				combo_localPath.setText(absolutePath);
 				fileTransferModel.setLocalPath(absolutePath);
+				
+				// Path Log
+				int num = 0;
+				combo_localPath.add(absolutePath, num++);
+				
+				if(combo_localPath.getItem(num).equals(absolutePath)) {
+					combo_localPath.remove(absolutePath);
+				}
+				
 				
 				local_allDirectoryList.addAll(fileTF.getFileDirectory(absolutePath));
 				localTBViewer.setContentProvider(new ArrayContentProvider());
 				localTBViewer.setLabelProvider(new TableViewLabelProvider(workbench));
+				
 				//Print Directory List
 				localTBViewer.setInput(local_allDirectoryList);
 				localTBViewer.refresh();
+				
 			}
 			
 		});
@@ -321,8 +334,21 @@ public class FileTransferView extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TreeItem item = (TreeItem) e.item;
-					List<DirectoryModel> directoryList = new ArrayList<DirectoryModel>();
-					String path;
+				
+				// ComboBox Remote Path
+				String treePath = ((TreeParent) e.item.getData()).getPath();
+				combo_remotePath.setText(treePath);
+
+				// Path Log
+				int num = 0;
+				combo_remotePath.add(treePath, num++);
+				
+				if(combo_remotePath.getItem(num).equals(treePath)) {
+					combo_remotePath.remove(num);
+				}
+				
+				List<DirectoryModel> directoryList = new ArrayList<DirectoryModel>();
+				String path;
 					
 					for(DirectoryModel tfItem : remot_allDirectoryList) {
 						//Setting Path
