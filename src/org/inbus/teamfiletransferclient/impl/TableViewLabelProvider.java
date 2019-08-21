@@ -1,16 +1,30 @@
 package org.inbus.teamfiletransferclient.impl;
 
+import java.net.URL;
+
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.resource.LocalResourceManager;
+import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.internal.dialogs.ViewLabelProvider;
 import org.inbus.teamfiletransferclient.model.DirectoryModel;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 
 public class TableViewLabelProvider implements ITableLabelProvider{
 
+	private final ImageDescriptor ZIP = getImageDescriptor("zip.png");
+	
 	private IWorkbench workbench;
+	private ResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
 	
 	public TableViewLabelProvider(IWorkbench workbench) {
 		this.workbench = workbench;
@@ -40,8 +54,15 @@ public class TableViewLabelProvider implements ITableLabelProvider{
 		case 0:
 			if(treeFileModel.isFolder()) {
 				imageKey = ISharedImages.IMG_OBJ_FOLDER;
-			}else {
-				imageKey = ISharedImages.IMG_OBJ_FILE;
+			}else{
+				switch (treeFileModel.getExt()) {
+				case "zip": case "7z" :
+					return resourceManager.createImage(ZIP);
+				default:
+					imageKey = ISharedImages.IMG_OBJ_FILE;
+					break;
+				}
+				
 			}
 		}
 		
@@ -66,5 +87,9 @@ public class TableViewLabelProvider implements ITableLabelProvider{
 		return "";
 	}
 	
-	
+	private static ImageDescriptor getImageDescriptor(String file) {
+	    Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
+	    URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
+	    return ImageDescriptor.createFromURL(url);
+	}
 }

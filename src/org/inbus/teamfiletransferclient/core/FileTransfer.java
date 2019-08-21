@@ -100,12 +100,11 @@ public class FileTransfer {
 		// 2. directory 객체의 내용이 폴더인지 파일인지 구분한다.
 
 		for(ChannelSftp.LsEntry oListItem : list) {
-			
 			matcher = ptrn.matcher(oListItem.toString());
 			while(matcher.find()) {
 			
 				if(matcher.group(6).equals(".") || matcher.group(6).equals(".."))
-					break;
+					continue;
 				
 				DirectoryModel tfModel = new DirectoryModel(
 						matcher.group(6),		// name
@@ -115,6 +114,18 @@ public class FileTransfer {
         				matcher.group(3),	// user/group
         				path		// path
 					);
+				if(matcher.group(6).contains(".")) {
+					int pos = matcher.group(6).lastIndexOf(".");
+					String ext = matcher.group(6).substring(pos+1);
+					if(ext != null)
+						tfModel.setExt(ext);
+//					String extension = ""; 
+//					if(!matcher.group(6).startsWith(".")) {
+//						extension = matcher.group(6).split(".")[matcher.group(6).split(".").length-1];
+//						if(extension != null)
+//							tfModel.setExt(extension);
+//					}
+				}
 				
 				tfList.add(tfModel);
 				

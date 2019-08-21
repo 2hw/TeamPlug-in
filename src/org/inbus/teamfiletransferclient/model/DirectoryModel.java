@@ -9,6 +9,7 @@ public class DirectoryModel {
 	private String permission;
 	private String user_group;
 	private String path;
+	private String ext;
 	
 	public static String[] COLUMN_HEADER = new String[] {"파일명", "크기", "최종수정" ,"권한", "소유자/그룹"};
 	
@@ -78,6 +79,12 @@ public class DirectoryModel {
 	}
 	public void setPath(String path) {
 		this.path = path;
+	}
+	public String getExt() {
+		return ext;
+	}
+	public void setExt(String ext) {
+		this.ext = ext;
 	}
 	
 }
