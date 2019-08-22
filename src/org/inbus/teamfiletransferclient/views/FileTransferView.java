@@ -86,8 +86,8 @@ public class FileTransferView extends ViewPart {
 	private Table table_remote;
 	private Table table_file;
 	
-	private Action action1;
-	private Action action2;
+	private Action localTableAction;
+	private Action remoteTableAction;
 	 
 
 	@Override
@@ -248,7 +248,10 @@ public class FileTransferView extends ViewPart {
 		table_file = tableViewer_1.getTable();
 		table_file.setBounds(0, 0, 1070, 90);
 
-		//Create User Event Function
+		/*	Create User Event Function	*/
+		
+		//Connection button Event
+		//서버에 접속 후 TreeViewer에 디렉토리를 구조를 표시
 		btn_search.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -271,6 +274,8 @@ public class FileTransferView extends ViewPart {
 			}
 		});
 		
+		//Tree Selection Event to local repository
+		//선택한 Tree의 item 하위경로의 디렉토리 구조를 localTBViewer에 표시
 		tree_local.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -308,18 +313,24 @@ public class FileTransferView extends ViewPart {
 			
 		});
 		
+		//Table Selection Event to local repository
+		//Table에 item을 선택 시 경로와 파일 이름을 저장하여 업로드 & 다운로드 시 사용
 		table_local.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TableItem tableItem = (TableItem) e.item;
-				DirectoryModel fileModel = (DirectoryModel) tableItem.getData();
+				File fileModel = (File) tableItem.getData();
 				fileTransferModel.setLocalFileName(fileModel.getName());
-				fileTransferModel.setLocalPath(fileModel.getPath());
+				fileTransferModel.setLocalPath(fileModel.getParentFile().toString());
+				localhookContextMenu();
+				
 			}
 			
 		});
 		
+		//Tree Selection Event to remote repository
+		//선택한 Tree의 item 하위경로의 디렉토리 구조를 remoteTBViewer에 표시
 		tree_remote.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -342,20 +353,22 @@ public class FileTransferView extends ViewPart {
 				String path;
 					
 					for(DirectoryModel tfItem : remot_allDirectoryList) {
-						//Setting Path
+						//Setting Path for display the table
 						path = tfItem.getPath().split("/")[tfItem.getPath().split("/").length - 1];
 						//SubDirectories of selected the folder
 						if(item.getText().equals(path)) {
 							directoryList.add(tfItem);
-							fileTransferModel.setRemotePath(tfItem.getPath());
 						}
 					}
+					fileTransferModel.setRemotePath(treePath);
 					remoteTBViewer.setInput(directoryList);
 					remoteTBViewer.refresh();
 			}
 			
 		});
 		
+		//Table Selection Event to remote repository
+		//Table에 item을 선택 시 경로와 파일 이름을 저장하여 업로드 & 다운로드 시 사용
 		table_remote.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -363,6 +376,7 @@ public class FileTransferView extends ViewPart {
 				TableItem tableItem = (TableItem) e.item;
 				DirectoryModel fileModel = (DirectoryModel) tableItem.getData();
 				fileTransferModel.setRemoteFileName(fileModel.getName());
+				remotehookContextMenu();
 			}
 		});
 		
@@ -391,9 +405,13 @@ public class FileTransferView extends ViewPart {
 	}
 	
 	private void fillContextMenu(IMenuManager manager) {
-		manager.add(action1);
-		// Other plug-ins can contribute there actions here
-		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		manager.add(localTableAction);
+		if(fileTF.checkBlank(fileTransferModel.getRemotePath(), fileTransferModel.getLocalPath())) {
+			// Other plug-ins can contribute there actions here
+			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		}else {
+			localTableAction.setEnabled(false);
+		}
 	}
 	
 	private void remotehookContextMenu() {
@@ -411,27 +429,31 @@ public class FileTransferView extends ViewPart {
 	}
 	
 	private void remotefillContextMenu(IMenuManager manager) {
-		manager.add(action2);
-		// Other plug-ins can contribute there actions here
-		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		manager.add(remoteTableAction);
+		if(fileTF.checkBlank(fileTransferModel.getRemotePath(), fileTransferModel.getLocalPath())) {
+			// Other plug-ins can contribute there actions here
+			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		}else {
+			remoteTableAction.setEnabled(false);
+		}
 	}
 	
 	private void makeActions() {
-		action1 = new Action() {
+		localTableAction = new Action() {
 			public void run() {
 				//File upload
 				fileTF.utilfunction("upload", fileTransferModel);
 			}
 		};
-		action1.setText("파일 업로드");
+		localTableAction.setText("파일 업로드");
 		
-		action2 = new Action() {
+		remoteTableAction = new Action() {
 			public void run() {
 				//File download
 				fileTF.utilfunction("download", fileTransferModel);
 			}
 		};
-		action2.setText("파일 다운로드");
+		remoteTableAction.setText("파일 다운로드");
 	}
 	
 	private void absoluteDirectory(TreeItem item) {

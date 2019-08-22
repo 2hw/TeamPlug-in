@@ -1,16 +1,15 @@
 package org.inbus.teamfiletransferclient.core;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.inbus.teamfiletransferclient.exceptions.InvalidServerInformationException;
-import org.inbus.teamfiletransferclient.exceptions.InvalidUtilInformationException;
 import org.inbus.teamfiletransferclient.impl.SFTPUtil;
 import org.inbus.teamfiletransferclient.model.ConnectionInfoModel;
 import org.inbus.teamfiletransferclient.model.DirectoryModel;
@@ -37,6 +36,11 @@ public class FileTransfer {
 	private String pattern = "(.+)\\s+(\\d+)\\s+(\\S+\\s+\\S+)\\s+(\\d+)\\s+(.+\\s+\\d+\\s+[\\d:]+)\\s+(.*)";
 	private Pattern ptrn = Pattern.compile(pattern);
 	Matcher matcher;
+	
+	/**
+	 * logger - java.util.logging.Logger
+	 */
+//	private final Logger log = LoggerFactory.getLogger(FileTransfer.class);
 	
     /**
      * 서버에 연결 후 디렉토리 반환
@@ -248,9 +252,9 @@ public class FileTransfer {
      * @return 경로가 잘못되어 있을 경우 false 반환 (default : true)
      * @exception 
      */
-	public boolean checkBlank(String remotePath, String localPath)  throws Exception {
+	public boolean checkBlank(String remotePath, String localPath) {
 		if(StringUtils.isBlank(remotePath) || StringUtils.isBlank(localPath)) {
-			throw new InvalidUtilInformationException(String.valueOf("serverPath : " + remotePath + " filePath : " + localPath));
+			return false;
 		}
 		return true;
 	}
