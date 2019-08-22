@@ -8,6 +8,13 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.inbus.teamfiletransferclient.model.TreeObject;
 import org.inbus.teamfiletransferclient.model.TreeParent;
 
+/**
+ * Tree에 보여질 노드를 리턴하는 클래스
+ * 부모노드와 자식노드를 리턴한다.
+ *
+ * @author lhw
+ * @since 2019.08.06
+ */
 
 public class TreeViewContentProvider implements ITreeContentProvider {
 

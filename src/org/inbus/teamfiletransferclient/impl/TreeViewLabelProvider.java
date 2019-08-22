@@ -11,6 +11,14 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
 import org.inbus.teamfiletransferclient.model.TreeParent;
 
+/**
+ * Tree에 표시될 노드를 제어하는 클래스
+ * 화면에 보여지게 되는 노드 명칭과 image를 제어한다.
+ *
+ * @author lhw
+ * @since 2019.08.06
+ */
+
 public class TreeViewLabelProvider extends LabelProvider {
 	private ResourceManager resourceManager;
 

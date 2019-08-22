@@ -1,7 +1,5 @@
 package org.inbus.teamfiletransferclient.model;
 
-import org.inbus.teamfiletransferclient.views.None;
-
 /**
 * FTP 접속 정보 Model
 * 접속하려는 서버의 정보를 담는 Model

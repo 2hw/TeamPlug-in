@@ -19,6 +19,13 @@ import org.inbus.teamfiletransferclient.model.TreeParent;
 
 import com.jcraft.jsch.ChannelSftp;
 
+/**
+ * 비즈니스 로직을 제어하는 클래스
+ * 화면부터 전반적인 기능을 제어하는 Controller
+ *
+ * @author lhw
+ * @since 2019.08.06
+ */
 
 public class FileTransfer {
 	
@@ -31,7 +38,16 @@ public class FileTransfer {
 	private Pattern ptrn = Pattern.compile(pattern);
 	Matcher matcher;
 	
-	
+    /**
+     * 서버에 연결 후 디렉토리 반환
+     *
+     * @param host 서버 주소
+     * @param userName 접속에 사용될 아이디
+     * @param password 비밀번호
+     * @param port  포트번호
+     * @return 서버 home 경로의 디렉토리 목록을 Tree구조로 반환
+     * @exception 
+     */
 	public TreeParent remoteConnect(String host, String userName, String password, String port) {
 		tfList = new ArrayList<DirectoryModel>();
 		
@@ -55,12 +71,17 @@ public class FileTransfer {
 		System.out.println("=> Connected to " + host);
 		TreeParent rtTP = getTreeDirectory(remoteHome);
 		
-//		util.disconnection();
-
 		return rtTP;
-		
 	}
 	
+    /**
+     * 경로에 해당하는 폴더를 찾아 Tree 구조로 반환 (재귀함수)
+     * 해당 경로에 폴더가 존재할시 자식노드로 추가하고 하위 폴더가 없을때까지 탐색
+     *
+     * @param 탐색할 경로
+     * @return 경로에 하위 폴더들을 Tree구조로 TreeParent 반환
+     * @exception 
+     */
 	public TreeParent getTreeDirectory(String path) {
 		String name = path.split("/")[path.split("/").length - 1];
 		
@@ -82,15 +103,15 @@ public class FileTransfer {
 	}
 	
 	/**
-	 * 경로에 대한 디렉토리 정보 가져오기
+	 * Remote경로에 대한 디렉토리 정보 가져오기
 	 * 
 	 * @param path 디렉토리 정보를 가져올 경로
-	 * @return TreeFileModel 리스트
+	 * @return TreeFileModel 리스트 반환
 	 */
 	
 	public List<DirectoryModel> getFileSystem(String path) {
 		
-		List<DirectoryModel> folders = new ArrayList<DirectoryModel>();	// 폴더 리스트
+		List<DirectoryModel> folders = new ArrayList<DirectoryModel>();		// 폴더 리스트
 		List<DirectoryModel> files = new ArrayList<DirectoryModel>();		// 파일 리스트
 		
 		Vector<ChannelSftp.LsEntry> list = util.getFileList(path);
@@ -107,13 +128,14 @@ public class FileTransfer {
 					continue;
 				
 				DirectoryModel tfModel = new DirectoryModel(
-						matcher.group(6),		// name
+						matcher.group(6),					// name
         				Integer.parseInt(matcher.group(4)),	// size
-        				matcher.group(5),	// modified date
-        				matcher.group(1), 	// permission
-        				matcher.group(3),	// user/group
-        				path		// path
+        				matcher.group(5),					// modified date
+        				matcher.group(1), 					// permission
+        				matcher.group(3),					// user/group
+        				path								// path
 					);
+				//확장자가 존재할 시
 				if(matcher.group(6).contains(".")) {
 					if(matcher.group(6).indexOf(".") != 0) {
 						String ext = getExtension(matcher.group(6));
@@ -135,6 +157,12 @@ public class FileTransfer {
 		return folders;
 	}
 	
+    /**
+     * 접속했을때의 경로의 폴더 및 파일 리스트를 리턴한다.
+     * 
+     * @return 경로안에 디렉토리 구조를 DirectoryModel 리스트 반환
+     * @exception 
+     */
 	public List<DirectoryModel> getFileModel() {
 		return tfList;
 	}
@@ -149,6 +177,13 @@ public class FileTransfer {
 		return valid;
 	}
 	
+    /**
+     * local 경로의 폴더 및 파일 리스트를 리턴한다.
+     * 
+     * @param path
+     * @return 경로안에 디렉토리 구조를 File 리스트로 반환
+     * @exception 
+     */
 	public List<File> getFileDirectory(String path) {
 		
 		List<File> subDirectory = new ArrayList<File>();
@@ -162,6 +197,14 @@ public class FileTransfer {
 		return subDirectory;
 	}
 	
+    /**
+     * 파일 업로드 및 다운로드 제어
+     * 
+     * @param selectAction 이벤트 구분(업로드, 다운로드)
+     * @param fileTransferModel	local & remote의 경로,파일명을 담는 Model
+     * @return void
+     * @exception 
+     */
 	public void utilfunction(String selectAction, FileTransferModel fileTransferModel) {
 		try {
 			if(checkBlank(fileTransferModel.getRemotePath(), fileTransferModel.getLocalPath())) {
@@ -180,17 +223,31 @@ public class FileTransfer {
 				}
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
+    /**
+     * 확장자를 찾아 리턴한다.
+     * 
+     * @param 파일명 (ex: test.txt)
+     * @return 확장자만 문자열로 반환
+     * @exception 
+     */
 	private String getExtension(String fileName) {
 		int pos = fileName.lastIndexOf( "." );
 		String ext = fileName.substring( pos + 1 );
 		return ext;
 	}
 	
+    /**
+     * local & remote 경로가 있는지 확인
+     * 
+     * @param remotePath 서버쪽 경로
+     * @param localPath	local경로
+     * @return 경로가 잘못되어 있을 경우 false 반환 (default : true)
+     * @exception 
+     */
 	public boolean checkBlank(String remotePath, String localPath)  throws Exception {
 		if(StringUtils.isBlank(remotePath) || StringUtils.isBlank(localPath)) {
 			throw new InvalidUtilInformationException(String.valueOf("serverPath : " + remotePath + " filePath : " + localPath));

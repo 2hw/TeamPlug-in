@@ -14,6 +14,13 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
 import org.inbus.teamfiletransferclient.model.DirectoryModel;
 
+/**
+ * Table에 표시될 데이터를 제어하는 클래스
+ * 화면에 보여지게 되는 내용을 getColumnText에서 리턴하여 준다.
+ *
+ * @author lhw
+ * @since 2019.08.06
+ */
 
 public class TableViewLabelProvider implements ITableLabelProvider{
 

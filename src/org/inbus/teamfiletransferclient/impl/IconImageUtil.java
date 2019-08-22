@@ -15,7 +15,6 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
-import org.inbus.teamfiletransferclient.views.None;
 
 /**
 * TableViewer에 아이콘을 나타냄
