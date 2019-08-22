@@ -70,8 +70,8 @@ public class FileTransferView extends ViewPart {
 	private TreeViewer remoteTRViewer;
 	private TableViewer remoteTBViewer;
 	
-	private FileTransfer fileTF = new FileTransfer();
-	private DirectoryModel trFileMD;
+	private FileTransfer fileTransfer = new FileTransfer();
+	private DirectoryModel treeModel;
 	private List<DirectoryModel> remot_allDirectoryList;
 	private List<File> local_allDirectoryList;
 	private String absolutePath = "";
@@ -179,17 +179,17 @@ public class FileTransferView extends ViewPart {
 		TableViewerColumn tableViewerColumn2 = new TableViewerColumn(localTBViewer, SWT.NONE);
 		TableColumn tblclmnNewColumn2 = tableViewerColumn2.getColumn();
 		tblclmnNewColumn2.setWidth(100);
-		tblclmnNewColumn2.setText(trFileMD.COLUMN_HEADER[0]);
+		tblclmnNewColumn2.setText(treeModel.COLUMN_HEADER[0]);
 		
 		TableViewerColumn tableViewerColumn2_1 = new TableViewerColumn(localTBViewer, SWT.NONE);
 		TableColumn tblclmnNewColumn2_1 = tableViewerColumn2_1.getColumn();
 		tblclmnNewColumn2_1.setWidth(100);
-		tblclmnNewColumn2_1.setText(trFileMD.COLUMN_HEADER[1]);
+		tblclmnNewColumn2_1.setText(treeModel.COLUMN_HEADER[1]);
 		
 		TableViewerColumn tableViewerColumn2_2 = new TableViewerColumn(localTBViewer, SWT.NONE);
 		TableColumn tblclmnNewColumn2_2 = tableViewerColumn2_2.getColumn();
 		tblclmnNewColumn2_2.setWidth(100);
-		tblclmnNewColumn2_2.setText(trFileMD.COLUMN_HEADER[2]);
+		tblclmnNewColumn2_2.setText(treeModel.COLUMN_HEADER[2]);
 		
 		Label label_localResult = new Label(group_local, SWT.NONE);
 		label_localResult.setBounds(0, 550, 530, 30);
@@ -216,27 +216,27 @@ public class FileTransferView extends ViewPart {
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(remoteTBViewer, SWT.NONE);
 		TableColumn tblclmnNewColumn = tableViewerColumn.getColumn();
 		tblclmnNewColumn.setWidth(100);
-		tblclmnNewColumn.setText(trFileMD.COLUMN_HEADER[0]);
+		tblclmnNewColumn.setText(treeModel.COLUMN_HEADER[0]);
 		
 		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(remoteTBViewer, SWT.NONE);
 		TableColumn tblclmnNewColumn_1 = tableViewerColumn_1.getColumn();
 		tblclmnNewColumn_1.setWidth(100);
-		tblclmnNewColumn_1.setText(trFileMD.COLUMN_HEADER[1]);
+		tblclmnNewColumn_1.setText(treeModel.COLUMN_HEADER[1]);
 		
 		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(remoteTBViewer, SWT.NONE);
 		TableColumn tblclmnNewColumn_2 = tableViewerColumn_2.getColumn();
 		tblclmnNewColumn_2.setWidth(100);
-		tblclmnNewColumn_2.setText(trFileMD.COLUMN_HEADER[2]);
+		tblclmnNewColumn_2.setText(treeModel.COLUMN_HEADER[2]);
 		
 		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(remoteTBViewer, SWT.NONE);
 		TableColumn tblclmnNewColumn_3 = tableViewerColumn_3.getColumn();
 		tblclmnNewColumn_3.setWidth(100);
-		tblclmnNewColumn_3.setText(trFileMD.COLUMN_HEADER[3]);
+		tblclmnNewColumn_3.setText(treeModel.COLUMN_HEADER[3]);
 		
 		TableViewerColumn tableViewerColumn_4 = new TableViewerColumn(remoteTBViewer, SWT.NONE);
 		TableColumn tblclmnNewColumn_4 = tableViewerColumn_4.getColumn();
 		tblclmnNewColumn_4.setWidth(100);
-		tblclmnNewColumn_4.setText(trFileMD.COLUMN_HEADER[4]);
+		tblclmnNewColumn_4.setText(treeModel.COLUMN_HEADER[4]);
 		
 		Label label_remoteResult = new Label(group_remote, SWT.NONE);
 		label_remoteResult.setBounds(0, 550, 530, 30);
@@ -256,7 +256,7 @@ public class FileTransferView extends ViewPart {
 			@Override
 			public void mouseUp(MouseEvent e) {
 				remot_allDirectoryList = new ArrayList<>();
-				TreeParent root = fileTF.remoteConnect(txt_host.getText(), txt_userName.getText(), txt_pwd.getText(), txt_port.getText());
+				TreeParent root = fileTransfer.remoteConnect(txt_host.getText(), txt_userName.getText(), txt_pwd.getText(), txt_port.getText());
 				TreeParent invisibleRoot = new TreeParent("", "");
 				invisibleRoot.addChild(root);
 				
@@ -268,7 +268,7 @@ public class FileTransferView extends ViewPart {
 				remoteTBViewer.setContentProvider(new ArrayContentProvider());
 				remoteTBViewer.setLabelProvider(new TableViewLabelProvider(workbench));
 				
-				remot_allDirectoryList.addAll(fileTF.getFileModel());
+				remot_allDirectoryList.addAll(fileTransfer.getFileModel());
 				remoteTBViewer.refresh();
 				remoteTBViewer.getControl().setFocus();
 			}
@@ -301,7 +301,7 @@ public class FileTransferView extends ViewPart {
 //				}
 				
 				
-				local_allDirectoryList.addAll(fileTF.getFileDirectory(absolutePath));
+				local_allDirectoryList.addAll(fileTransfer.getFileDirectory(absolutePath));
 				localTBViewer.setContentProvider(new ArrayContentProvider());
 				localTBViewer.setLabelProvider(new TableViewLabelProvider(workbench));
 				
@@ -386,8 +386,8 @@ public class FileTransferView extends ViewPart {
 		workbench.getHelpSystem().setHelp(remoteTBViewer.getControl(), "FileTransferView.remoteTBViewer");
 		getSite().setSelectionProvider(remoteTBViewer);
 		makeActions();
-		localhookContextMenu();
-		remotehookContextMenu();
+//		localhookContextMenu();
+//		remotehookContextMenu();
 	}
 	
 	private void localhookContextMenu() {
@@ -406,7 +406,7 @@ public class FileTransferView extends ViewPart {
 	
 	private void fillContextMenu(IMenuManager manager) {
 		manager.add(localTableAction);
-		if(fileTF.checkBlank(fileTransferModel.getRemotePath(), fileTransferModel.getLocalPath())) {
+		if(fileTransfer.checkBlank(fileTransferModel.getRemotePath(), fileTransferModel.getLocalPath())) {
 			// Other plug-ins can contribute there actions here
 			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 		}else {
@@ -430,7 +430,7 @@ public class FileTransferView extends ViewPart {
 	
 	private void remotefillContextMenu(IMenuManager manager) {
 		manager.add(remoteTableAction);
-		if(fileTF.checkBlank(fileTransferModel.getRemotePath(), fileTransferModel.getLocalPath())) {
+		if(fileTransfer.checkBlank(fileTransferModel.getRemotePath(), fileTransferModel.getLocalPath())) {
 			// Other plug-ins can contribute there actions here
 			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 		}else {
@@ -442,7 +442,7 @@ public class FileTransferView extends ViewPart {
 		localTableAction = new Action() {
 			public void run() {
 				//File upload
-				fileTF.utilfunction("upload", fileTransferModel);
+				fileTransfer.utilfunction("upload", fileTransferModel);
 			}
 		};
 		localTableAction.setText("파일 업로드");
@@ -450,7 +450,7 @@ public class FileTransferView extends ViewPart {
 		remoteTableAction = new Action() {
 			public void run() {
 				//File download
-				fileTF.utilfunction("download", fileTransferModel);
+				fileTransfer.utilfunction("download", fileTransferModel);
 			}
 		};
 		remoteTableAction.setText("파일 다운로드");

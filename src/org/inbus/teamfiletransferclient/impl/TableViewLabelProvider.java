@@ -60,7 +60,7 @@ public class TableViewLabelProvider implements ITableLabelProvider{
 			}else if(element instanceof DirectoryModel) {
 				
 				DirectoryModel remoteFile = (DirectoryModel) element;
-				
+//				
 				if(remoteFile.isFolder()) {
 					imageKey = ISharedImages.IMG_OBJ_FOLDER;
 				}else {
