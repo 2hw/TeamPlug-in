@@ -201,10 +201,10 @@ public class FileTransfer {
 	}
 	
     /**
-     * 파일 업로드 및 다운로드 제어
+     * 마우스 우클릭 이벤트 로직
      * 
-     * @param selectAction 이벤트 구분(업로드, 다운로드)
-     * @param fileTransferModel	local & remote의 경로,파일명을 담는 Model
+     * @param selectAction 이벤트 구분(업로드, 다운로드, 새폴더 만들기)
+     * @param fileTransferModel	(local & remote의 경로,파일명을 담는 Model)
      * @return void
      * @exception 
      */

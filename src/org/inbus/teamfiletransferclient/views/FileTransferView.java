@@ -94,6 +94,8 @@ public class FileTransferView extends ViewPart {
 	private Action localTableAction;
 	private Action remoteTableAction;
 	private Action newDirectoryAction;
+	private Action tableRefreshAction;
+	private Action tableDeleteDirAction;
 	
 	private Shell shell;
 	 
@@ -289,7 +291,7 @@ public class FileTransferView extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				
-				local_allDirectoryList = new ArrayList<>();
+				local_allDirectoryList = new ArrayList<File>();
 				absolutePath = "";
 				
 				TreeItem item = (TreeItem) e.item;
@@ -463,6 +465,8 @@ public class FileTransferView extends ViewPart {
 			break;
 		}
 		manager.add(newDirectoryAction);
+		manager.add(tableRefreshAction);
+		manager.add(tableDeleteDirAction);
 	}
 	
 	private void makeActions() {
@@ -493,14 +497,51 @@ public class FileTransferView extends ViewPart {
 					}else {
 						fileTransferModel.setCreatingDirName(dialog.getDirectoryName());
 						fileTransfer.utilfunction("newDirectory", fileTransferModel);
+						tableRefreshAction.run();
 					}
 					
 				}
-				
-//				fileTransfer.utilfunction("newDirectory", fileTransferModel);
 			}
 		};
 		newDirectoryAction.setText("새 디렉토리 만들기");
+		
+		tableRefreshAction = new Action() {
+			public void run() {
+				if(fileTransferModel.getCommonActionFlag().equals("local") ) {
+					local_allDirectoryList = new ArrayList<File>();
+					local_allDirectoryList.addAll(fileTransfer.getFileDirectory(absolutePath));
+					//Print Directory List
+					localTBViewer.setInput(local_allDirectoryList);
+					localTBViewer.refresh();
+				}else {
+					//remote service
+				}
+			}
+		};
+		tableRefreshAction.setText("새로고침");
+		
+		tableDeleteDirAction = new Action() {
+			public void run() {
+				if(fileTransferModel.getCommonActionFlag().equals("local") ) {
+					File file = new File(fileTransferModel.getLocalPath() + "/" + fileTransferModel.getLocalFileName());
+			         
+			        if( file.exists() ){
+			            if(file.delete()){
+			            	tableRefreshAction.run();
+			                System.out.println("파일삭제 성공");
+			            }else{
+			                System.out.println("파일삭제 실패");
+			            }
+			        }else{
+			            System.out.println("파일이 존재하지 않습니다.");
+			        }
+
+				}else {
+					//remote service
+				}
+			}
+		};
+		tableDeleteDirAction.setText("삭제");
 	}
 	
 	private void absoluteDirectory(TreeItem item) {
