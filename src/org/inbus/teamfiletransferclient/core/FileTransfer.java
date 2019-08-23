@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -211,7 +210,7 @@ public class FileTransfer {
      */
 	public void utilfunction(String selectAction, FileTransferModel fileTransferModel) {
 		try {
-			if(checkBlank(fileTransferModel.getRemotePath(), fileTransferModel.getLocalPath())) {
+//			if(checkBlank(fileTransferModel.getRemotePath(), fileTransferModel.getLocalPath())) {
 				
 				switch (selectAction) {
 				case "upload":
@@ -224,8 +223,22 @@ public class FileTransfer {
 					util.download(fileTransferModel.getRemotePath(), fileTransferModel.getRemoteFileName(), fileTransferModel.getLocalPath());
 					System.out.println("=> File downloading success the " + fileTransferModel.getRemoteFileName());
 					break;
+					
+				case "newDirectory":
+					//commonAction(local or remote)
+					//create new directory
+					if(fileTransferModel.getCommonActionFlag().equals("local")) {
+						
+						File file = new File(fileTransferModel.getLocalPath()+ "/" +fileTransferModel.getCreatingDirName());
+						file.mkdir();
+					}
+					else {
+						util.createDir(fileTransferModel.getCreatingDirName(), fileTransferModel.getRemotePath());
+					}
+					System.out.println("=> Create directory success the " + fileTransferModel.getCreatingDirName());
+					break;
 				}
-			}
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

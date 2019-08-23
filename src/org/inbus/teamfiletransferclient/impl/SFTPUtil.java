@@ -13,6 +13,7 @@ import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import com.jcraft.jsch.SftpATTRS;
 import com.jcraft.jsch.SftpException;
 
 /**
@@ -174,8 +175,6 @@ public class SFTPUtil{
 
         } catch (IOException e) {
 
-            // TODO Auto-generated catch block
-
             e.printStackTrace();
 
         } finally {
@@ -194,6 +193,30 @@ public class SFTPUtil{
         }
     }
 
+    public void createDir(String dir, String path) {
+    	SftpATTRS attrs=null;
+
+    	try {
+
+    	    attrs = channelSftp.stat(path + File.separator + dir);
+
+    	    if (attrs != null) {
+    	    	
+    	    	System.out.println("Directory exists IsDir="+attrs.isDir());
+    	    	
+    	    } else {
+    	    	
+    	    	System.out.println("Creating dir "+dir);
+    	    	
+    	    	channelSftp.mkdir(dir);
+    	    }
+    	} catch (SftpException e) {
+
+            e.printStackTrace();
+
+        } 
+    }
+    
     /**
      * 서버와의 연결을 끊는다.
      */

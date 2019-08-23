@@ -7,15 +7,19 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -29,6 +33,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -88,6 +93,9 @@ public class FileTransferView extends ViewPart {
 	
 	private Action localTableAction;
 	private Action remoteTableAction;
+	private Action newDirectoryAction;
+	
+	private Shell shell;
 	 
 
 	@Override
@@ -391,7 +399,7 @@ public class FileTransferView extends ViewPart {
 	}
 	
 	private void localhookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
+		MenuManager menuMgr = new MenuManager("#LocalMenu");
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			@Override
@@ -406,6 +414,9 @@ public class FileTransferView extends ViewPart {
 	
 	private void fillContextMenu(IMenuManager manager) {
 		manager.add(localTableAction);
+		
+		commonActions(manager, "#LocalMenu");
+		
 		if(fileTransfer.checkBlank(fileTransferModel.getRemotePath(), fileTransferModel.getLocalPath())) {
 			// Other plug-ins can contribute there actions here
 			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
@@ -415,7 +426,7 @@ public class FileTransferView extends ViewPart {
 	}
 	
 	private void remotehookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
+		MenuManager menuMgr = new MenuManager("#RemoteMenu");
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			@Override
@@ -430,12 +441,28 @@ public class FileTransferView extends ViewPart {
 	
 	private void remotefillContextMenu(IMenuManager manager) {
 		manager.add(remoteTableAction);
+		
+		commonActions(manager, "#RemoteMenu");
+		
 		if(fileTransfer.checkBlank(fileTransferModel.getRemotePath(), fileTransferModel.getLocalPath())) {
 			// Other plug-ins can contribute there actions here
 			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 		}else {
 			remoteTableAction.setEnabled(false);
 		}
+	}
+	
+	private void commonActions(IMenuManager manager, String menuId) {
+		switch (menuId) {
+		case "#LocalMenu":
+			fileTransferModel.setCommonActionFlag("local");
+			break;
+
+		case "#RemoteMenu":
+			fileTransferModel.setCommonActionFlag("remote");
+			break;
+		}
+		manager.add(newDirectoryAction);
 	}
 	
 	private void makeActions() {
@@ -454,6 +481,26 @@ public class FileTransferView extends ViewPart {
 			}
 		};
 		remoteTableAction.setText("파일 다운로드");
+		
+		newDirectoryAction = new Action() {
+			public void run() {
+				//create new directory
+				NewDirectoryDialog dialog = new NewDirectoryDialog(shell);
+				dialog.create();
+				if(dialog.open() == Window.OK) {
+					if(StringUtils.isBlank(dialog.getDirectoryName())) {
+						MessageDialog.openInformation(shell, "Warning", "폴더명을 입력하십시오!");
+					}else {
+						fileTransferModel.setCreatingDirName(dialog.getDirectoryName());
+						fileTransfer.utilfunction("newDirectory", fileTransferModel);
+					}
+					
+				}
+				
+//				fileTransfer.utilfunction("newDirectory", fileTransferModel);
+			}
+		};
+		newDirectoryAction.setText("새 디렉토리 만들기");
 	}
 	
 	private void absoluteDirectory(TreeItem item) {
