@@ -2,15 +2,15 @@
 
 > 네트워크를 통해 파일을 주고 받는 파일전송 서비스
 
-## 사용 예제
+## 실행화면
 
-스크린 샷과 코드 예제를 통해 사용 방법을 자세히 설명합니다.
+![image](https://user-images.githubusercontent.com/36910089/63557201-bb482a80-c582-11e9-9df9-2353cc5c6509.png)
 
 ## 📂 Directory structure
 
 ```bash
                         
-FileTransfer 													#프로젝트
+FileTransfer 												#프로젝트
 └─src
 │   └─org
 │       └─inbus
@@ -52,11 +52,11 @@ FileTransfer 													#프로젝트
 │  README.md
 ```
 
-## 개발 환경 설정
+## 협업 환경 
 
-모든 개발 의존성 설치 방법과 자동 테스트 슈트 실행 방법을 운영체제 별로 작성합니다.
+[![license](https://img.shields.io/badge/github-github.com%2F2hw%2FTeamPlug--in-yellow.svg)](https://img.shields.io/badge/github-github.com%2F2hw%2FTeamPlug--in-yellow)
 
-```sh
-make install
-npm test
-```
+[![license](https://img.shields.io/badge/git-2.22-green.svg)](https://img.shields.io/badge/git-2.22-green)
+
+[![license](https://img.shields.io/badge/sourceTree-3.13-blue.svg)](https://img.shields.io/badge/sourceTree-3.13-blue)
+
