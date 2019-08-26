@@ -30,7 +30,8 @@ public class FileTransfer {
 	private ConnectionInfoModel connectionInfoModel = new ConnectionInfoModel();
 	private SFTPUtil util = new SFTPUtil();
 	private List<DirectoryModel> tfList;
-	private String remoteHome = "/home/testuser";
+	private String remoteHome = "/";
+	private boolean rootFlag = true;
 	
 	private String pattern = "(.+)\\s+(\\d+)\\s+(\\S+\\s+\\S+)\\s+(\\d+)\\s+(.+\\s+\\d+\\s+[\\d:]+)\\s+(.*)";
 	private Pattern ptrn = Pattern.compile(pattern);
@@ -86,7 +87,13 @@ public class FileTransfer {
      * @exception 
      */
 	public TreeParent getTreeDirectory(String path) {
-		String name = path.split("/")[path.split("/").length - 1];
+		String name = "";
+		if(rootFlag) {
+			name = path;
+			rootFlag = false;
+		} else {
+			name = path.split("/")[path.split("/").length - 1];
+		}
 		
 		// 1. 파일 객체 생성 (path 정보를 가지는 파일 만듬)
 		// 현재 경로를 파일 객체로 생성

@@ -197,8 +197,8 @@ public class SFTPUtil{
     	SftpATTRS attrs=null;
 
     	try {
-
-    	    attrs = channelSftp.stat(path + File.separator + dir);
+    		System.out.println(path + "/" + dir);
+    	    attrs = channelSftp.stat(path + "/" + dir);
 
     	    if (attrs != null) {
     	    	

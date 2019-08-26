@@ -119,7 +119,7 @@ public class FileTransferView extends ViewPart {
 		label_host.setText("호스트");
 		
 		txt_host = new Text(group_connect, SWT.BORDER);
-		txt_host.setText("210.103.215.160");
+		txt_host.setText("210.103.215.37");
 		txt_host.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label label_pwd = new Label(group_connect, SWT.NONE);
@@ -151,7 +151,7 @@ public class FileTransferView extends ViewPart {
 		label_port.setText("포트");
 		
 		txt_port = new Text(group_connect, SWT.BORDER);
-		txt_port.setText("3322");
+		txt_port.setText("22");
 		txt_port.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		new Label(group_connect, SWT.NONE);
 		
@@ -390,7 +390,8 @@ public class FileTransferView extends ViewPart {
 					
 					for(DirectoryModel tfItem : remot_allDirectoryList) {
 						//Setting Path for display the table
-						path = tfItem.getPath().split("/")[tfItem.getPath().split("/").length - 1];
+//						path = tfItem.getPath().split("/")[tfItem.getPath().split("/").length - 1];
+						path = tfItem.getPath();
 						//SubDirectories of selected the folder
 						if(item.getText().equals(path)) {
 							directoryList.add(tfItem);
