@@ -3,13 +3,14 @@ package org.inbus.teamfiletransferclient.views;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -300,81 +301,13 @@ public class FileTransferView extends ViewPart {
 				combo_localPath.setText(absolutePath);
 				fileTransferModel.setLocalPath(absolutePath);
 				
-				int num = 0;
-				combo_localPath.add(absolutePath, num++);
-				
-				/*
-				// Path Log
-				for (int i = 0; i < combo_localPath.getItemCount(); i++) {
-					String result = combo_localPath.getItem(i);
-					
-					System.out.println("result " + (i+1) + " > " + result);
-					//System.out.println("E:? > " + result.equals("E:"));
-					
-					//System.out.println(absolutePath + "?                   ==== " + result.equals(absolutePath));
-					
-					
-					
-					for(int x = 0; x < result.length(); x++) {
-						if(result.equals(absolutePath)) {
-							trueCount++;
-						}
-					}
-					System.out.println(trueCount);
-				}
-				System.out.println("**************************");
-				
-				*/
-				
-				
-				
-				
-				
-				int count = 0;
-				for(int i = 0; i < combo_localPath.getItemCount(); i++) {
-					String result = combo_localPath.getItem(i);
-					
-					if(result.equals(absolutePath) == true) {
-						count++;
-						
-					} else if (result.equals(absolutePath) == false) {
-						count = 0;
-					} 
-					
-					if(count == 2) {
-						
-						// 
-					}
-					
-					System.out.println("result " + (i+1) + " > " + result +", "+ count);
-					
-				}
-				System.out.println("**************************");
-				
-				
-				
-				
-				//String items[] = combo_localPath.getItems();
-				
-				/*
-				TreeSet t = new TreeSet();
-				for (int i = 0; i < items.length; i++) {
-					t.add(items[i]);
-				}
-				
-				Iterator it = t.iterator();
-				while (it.hasNext()) {
-					System.out.println(it.next());
-				}
-				
-				String[] values = t.toString().split(", ");
-				
-				for(String test : values) {
-					//System.out.println(test);
-				}
-				*/
-				
-				
+  				for(String comboListItem : combo_localPath.getItems()) {
+  					if(comboListItem.equals(absolutePath)) {
+  						combo_localPath.remove(absolutePath);
+  					}
+  				}
+  				combo_localPath.add(absolutePath);
+  				
 				
 				local_allDirectoryList.addAll(fileTransfer.getFileDirectory(absolutePath));
 				localTBViewer.setContentProvider(new ArrayContentProvider());
@@ -437,7 +370,19 @@ public class FileTransferView extends ViewPart {
 
 				// Path Log
 				int num = 0;
-				combo_remotePath.add(treePath, num++);
+				
+  				for(String i : combo_remotePath.getItems()) {
+  					if(i.equals(treePath)) {
+  						combo_remotePath.remove(treePath);
+  					}
+  				}
+  				combo_remotePath.add(treePath, num++);
+				
+				for(String i : combo_remotePath.getItems()) {
+  					System.out.println("get comboItem : " + i);
+  				}
+				System.out.println("*****************************");
+				
 				
 				List<DirectoryModel> directoryList = new ArrayList<DirectoryModel>();
 				String path;
@@ -450,6 +395,7 @@ public class FileTransferView extends ViewPart {
 							directoryList.add(tfItem);
 						}
 					}
+					
 					fileTransferModel.setRemotePath(treePath);
 					remoteTBViewer.setInput(directoryList);
 					remoteTBViewer.refresh();
@@ -487,6 +433,7 @@ public class FileTransferView extends ViewPart {
 				remotehookContextMenu();
 			}
 		});
+		
 		
 		// Create the help context id for the viewer's control
 		workbench.getHelpSystem().setHelp(localTBViewer.getControl(), "FileTransferView.localTBViewer");
