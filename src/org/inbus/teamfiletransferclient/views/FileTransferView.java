@@ -107,7 +107,7 @@ public class FileTransferView extends ViewPart {
 		composite_main.setLayout(new GridLayout(2, false));
 		
 		Group group_connect = new Group(composite_main, SWT.NONE);
-		GridData gd_group_connect = new GridData(SWT.CENTER, SWT.CENTER, false, false, 2, 1);
+		GridData gd_group_connect = new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1);
 		gd_group_connect.widthHint = 367;
 		group_connect.setLayoutData(gd_group_connect);
 		group_connect.setText("연결 정보");
@@ -302,13 +302,80 @@ public class FileTransferView extends ViewPart {
 				combo_localPath.setText(absolutePath);
 				fileTransferModel.setLocalPath(absolutePath);
 				
+				int num = 0;
+				combo_localPath.add(absolutePath, num++);
+				
+				/*
 				// Path Log
-//				int num = 0;
-//				combo_localPath.add(absolutePath, num++);
-//				
-//				if(combo_localPath.getItem(num).equals(absolutePath)) {
-//					combo_localPath.remove(absolutePath);
-//				}
+				for (int i = 0; i < combo_localPath.getItemCount(); i++) {
+					String result = combo_localPath.getItem(i);
+					
+					System.out.println("result " + (i+1) + " > " + result);
+					//System.out.println("E:? > " + result.equals("E:"));
+					
+					//System.out.println(absolutePath + "?                   ==== " + result.equals(absolutePath));
+					
+					
+					
+					for(int x = 0; x < result.length(); x++) {
+						if(result.equals(absolutePath)) {
+							trueCount++;
+						}
+					}
+					System.out.println(trueCount);
+				}
+				System.out.println("**************************");
+				
+				*/
+				
+				
+				
+				
+				
+				int count = 0;
+				for(int i = 0; i < combo_localPath.getItemCount(); i++) {
+					String result = combo_localPath.getItem(i);
+					
+					if(result.equals(absolutePath) == true) {
+						count++;
+						
+					} else if (result.equals(absolutePath) == false) {
+						count = 0;
+					} 
+					
+					if(count == 2) {
+						
+						// 
+					}
+					
+					System.out.println("result " + (i+1) + " > " + result +", "+ count);
+					
+				}
+				System.out.println("**************************");
+				
+				
+				
+				
+				//String items[] = combo_localPath.getItems();
+				
+				/*
+				TreeSet t = new TreeSet();
+				for (int i = 0; i < items.length; i++) {
+					t.add(items[i]);
+				}
+				
+				Iterator it = t.iterator();
+				while (it.hasNext()) {
+					System.out.println(it.next());
+				}
+				
+				String[] values = t.toString().split(", ");
+				
+				for(String test : values) {
+					//System.out.println(test);
+				}
+				*/
+				
 				
 				
 				local_allDirectoryList.addAll(fileTransfer.getFileDirectory(absolutePath));
@@ -319,6 +386,25 @@ public class FileTransferView extends ViewPart {
 				localTBViewer.setInput(local_allDirectoryList);
 				localTBViewer.refresh();
 				
+				// count (label_localResult)
+				int fCount = 0;
+				int dCount = 0;
+				int longSize = 0;
+				String strSize = "";
+				
+				for(int i = 0; i < local_allDirectoryList.size(); i++) {
+					
+					if(local_allDirectoryList.get(i).isDirectory() == true) {
+						dCount++;
+					} else if (local_allDirectoryList.get(i).isDirectory() == false) {
+						fCount++;
+					}
+					
+					longSize = longSize += local_allDirectoryList.get(i).length();
+					strSize = Long.toString(longSize);
+					
+				}
+				label_localResult.setText("디렉터리 : " + dCount + "개, 파일 : " + fCount + "개, 총 크기 : " + strSize + "바이트");
 			}
 			
 		});
@@ -352,12 +438,8 @@ public class FileTransferView extends ViewPart {
 				combo_remotePath.setText(treePath);
 
 				// Path Log
-//				int num = 0;
-//				combo_remotePath.add(treePath, num++);
-//				
-//				if(combo_remotePath.getItem(num).equals(treePath)) {
-//					combo_remotePath.remove(num);
-//				}
+				int num = 0;
+				combo_remotePath.add(treePath, num++);
 				
 				List<DirectoryModel> directoryList = new ArrayList<DirectoryModel>();
 				String path;
@@ -373,9 +455,27 @@ public class FileTransferView extends ViewPart {
 					fileTransferModel.setRemotePath(treePath);
 					remoteTBViewer.setInput(directoryList);
 					remoteTBViewer.refresh();
+					
+					// count (label_remoteResult)
+					int fCount = 0;
+					int dCount = 0;
+					int totSize = 0;
+					
+					for(int i = 0; i < directoryList.size(); i++) {
+						
+						if(directoryList.get(i).isFolder() == true) {
+							dCount++;
+						} else if (directoryList.get(i).isFolder() == false) {
+							fCount++;
+						}
+						
+						totSize = totSize += directoryList.get(i).getSize();
+					}
+					label_remoteResult.setText("디렉터리 : " + dCount + "개, 파일 : " + fCount + "개, 총 크기 : " + totSize + "바이트");
 			}
 			
 		});
+		
 		
 		//Table Selection Event to remote repository
 		//Table에 item을 선택 시 경로와 파일 이름을 저장하여 업로드 & 다운로드 시 사용
