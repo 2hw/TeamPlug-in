@@ -7,6 +7,7 @@ import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
 import org.inbus.teamfiletransferclient.model.TreeParent;
@@ -46,9 +47,11 @@ public class TreeViewLabelProvider extends LabelProvider {
 	@Override
 	public Image getImage(Object element) {
 		String imageKey = ISharedImages.IMG_OBJ_ELEMENT;
-		if (element instanceof File)
-		   imageKey = ISharedImages.IMG_OBJ_FOLDER;
-		if (element instanceof TreeParent)
+		Display display = Display.getCurrent();
+		if (element instanceof File) {
+			File file = (File) element;
+			return IconImageUtil.getImage(display, file);
+		}else if (element instanceof TreeParent)
 			   imageKey = ISharedImages.IMG_OBJ_FOLDER;
 		return workbench.getSharedImages().getImage(imageKey);
 	}
