@@ -2,6 +2,8 @@
 
 > **네트워크를 통해 파일을 주고 받는 파일전송 서비스**
 
+<br>
+
 ## 개발 환경
 
  [![license](https://img.shields.io/badge/java-1.8-yellow)](https://img.shields.io/badge/java-1.8-yellow) [![license](https://img.shields.io/badge/eclipse-4.10-green)](https://img.shields.io/badge/eclipse-4.10-green) [![license](https://img.shields.io/badge/windowbuilder-1.9.1-blue)](https://img.shields.io/badge/windowbuilder-1.9.1-blue)
@@ -34,9 +36,9 @@
   
 ![image](https://user-images.githubusercontent.com/38846776/63754982-bb348b80-c8f0-11e9-8d0a-4ac9ad07ad30.png)
   + *issue  :  프로젝트를 진행하면서 발생하는 모든 이슈 (버그 발생, 개발, 풀 리퀘스트 등등)*
-  + *커밋 메세지를 통한 이슈 Close  처리*
+  + *커밋 메세지를 통한 이슈 Close  처리*  ``` (Keyword] [Issue Number] [commit emssage (생략가능)]```
 
- ``` (Keyword] [Issue Number] [commit emssage (생략가능)]```
+
  
   <br>
 
