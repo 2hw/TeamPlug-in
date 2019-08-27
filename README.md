@@ -17,43 +17,43 @@
 
 ## 실행화면
 
-![image](https://user-images.githubusercontent.com/36910089/63557201-bb482a80-c582-11e9-9df9-2353cc5c6509.png)
+![image](https://user-images.githubusercontent.com/36910089/63744562-a77e2a80-c8da-11e9-9c4b-0ba902d2b575.png)
 
 ## 📂 Directory structure
 
 ```bash
                         
-FileTransfer 									#프로젝트
+FileTransfer 												 #프로젝트
 └─src
 │   └─org
 │       └─inbus
 │           └─teamfiletransferclient
 │               ├─core
-│               │      FileTransferCore.java 					 #컨트롤러
+│               │      FileTransferCore.java 					#컨트롤러
 │               │
 │               ├─exceptions
-│               │      InvalidServerInformationException.java  #예외 처리
+│               │      InvalidServerInformationException.java  	  #예외 처리
 │               │
 │               ├─impl
-│               │      IconImageUtil.java 					 #아이콘을 표시하는 Util 클래스
-│               │      SFTPUtil.java 						 #SFTP 연결 클래스 
-│               │      TableViewLabelProvider.java 				#Table에 표시되는 데이터 제어 클래스
-│               │      TreeViewContentProvider.java 				#Tree에 보여질 노드를 리턴하는 클래스
-│               │      TreeViewLabelProvider.java 				#Tree에 표시될 노드 제어 클래스
+│               │      IconImageUtil.java 					 	#아이콘을 표시하는 Util 클래스
+│               │      SFTPUtil.java 						    #SFTP 연결 클래스 
+│               │      TableViewLabelProvider.java 				 #Table에 표시되는 데이터 제어 클래스
+│               │      TreeViewContentProvider.java 			 #Tree에 보여질 노드를 리턴하는 클래스
+│               │      TreeViewLabelProvider.java 				 #Tree에 표시될 노드 제어 클래스
 │               │
 │               ├─model
-│               │      ConnectionInfoModel.java 	           		#FTP 접속 정보 VO
-│               │      DirectoryModel.java 				#접속한 서버의 디렉터리 VO
-│               │      FileTransferModel.java 					#접속한 서버의 파일 정보 VO
-│               │      TreeObject.java 						 #Tree VO
-│               │      TreeParent.java 						 #하위 Tree VO
+│               │      ConnectionInfo.java 	           			 #FTP 접속 정보 VO
+│               │      Directory.java 						    #접속한 서버의 디렉터리 VO
+│               │      FileTransfer.java 						#접속한 서버의 파일 정보 VO
+│               │      TreeObject.java 						 	#Tree VO
+│               │      TreeParent.java 						 	#하위 Tree VO
 │               │
 │               └─views
 │                       FileTransferView.java 					 #플러그인 메인 뷰
-|						NewDirectoryDialog.java
+|					  NewDirectoryDialog.java
 ├─lib
 │      commons-lang-2.6.jar
-│      jsch-0.1.55.jar
+│      jsch-0.1.55.jar										   #SFTP 라이브러리
 │
 ├─META-INF
 │      MANIFEST.MF

@@ -83,7 +83,7 @@ public class FileTransferView extends ViewPart {
 	private List<Directory> directoryList;
 	private String absolutePath = "";
 	private FileTransfer fileTransferModel = new FileTransfer();
-	private String treePath;
+	private String treePath = "";
 	
 	@Inject IWorkbench workbench;
 	private Text txt_host;
@@ -440,9 +440,8 @@ public class FileTransferView extends ViewPart {
 	
 	private void getRemoteTable(List<Directory> remoteAllDirList) {
 		directoryList = new ArrayList<Directory>();
-		String path;
+		String path ="";
 		for(Directory tfItem : remoteAllDirList) {
-			System.out.println(tfItem.toString());
 			//Setting Path for display the table
 //			path = tfItem.getPath().split("/")[tfItem.getPath().split("/").length - 1];
 			path = tfItem.getPath();
