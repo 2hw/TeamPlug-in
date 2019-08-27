@@ -378,11 +378,6 @@ public class FileTransferView extends ViewPart {
   				}
   				combo_remotePath.add(treePath, num++);
 				
-				for(String i : combo_remotePath.getItems()) {
-  					System.out.println("get comboItem : " + i);
-  				}
-				System.out.println("*****************************");
-				
 				getRemoteTable(remot_allDirectoryList);
 					
 				// count (label_remoteResult)
@@ -450,7 +445,7 @@ public class FileTransferView extends ViewPart {
 				directoryList.add(tfItem);
 			}
 		}
-		
+		remoteTBViewer.setInput("");
 		fileTransferModel.setRemotePath(treePath);
 		remoteTBViewer.setInput(directoryList);
 		remoteTBViewer.refresh();
@@ -477,6 +472,7 @@ public class FileTransferView extends ViewPart {
 		
 		if(fileTransfer.checkBlank(fileTransferModel.getRemotePath(), fileTransferModel.getLocalPath())) {
 			// Other plug-ins can contribute there actions here
+			localTableAction.setEnabled(true);
 			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 		}else {
 			localTableAction.setEnabled(false);
@@ -504,6 +500,7 @@ public class FileTransferView extends ViewPart {
 		
 		if(fileTransfer.checkBlank(fileTransferModel.getRemotePath(), fileTransferModel.getLocalPath())) {
 			// Other plug-ins can contribute there actions here
+			remoteTableAction.setEnabled(true);
 			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 		}else {
 			remoteTableAction.setEnabled(false);
@@ -530,6 +527,7 @@ public class FileTransferView extends ViewPart {
 			public void run() {
 				//File upload
 				fileTransfer.utilfunction("upload", fileTransferModel);
+				tableRefreshAction.run();
 			}
 		};
 		localTableAction.setText("파일 업로드");
@@ -538,6 +536,7 @@ public class FileTransferView extends ViewPart {
 			public void run() {
 				//File download
 				fileTransfer.utilfunction("download", fileTransferModel);
+				tableRefreshAction.run();
 			}
 		};
 		remoteTableAction.setText("파일 다운로드");
@@ -553,9 +552,8 @@ public class FileTransferView extends ViewPart {
 					}else {
 						fileTransferModel.setDirName(dialog.getDirectoryName());
 						fileTransfer.utilfunction("newDirectory", fileTransferModel);
-						tableRefreshAction.run();
 					}
-					
+					tableRefreshAction.run();
 				}
 			}
 		};
@@ -573,8 +571,9 @@ public class FileTransferView extends ViewPart {
 					//remote service
 					//서버 접속해서 디렉토리 가져온 후 테이블 refresh
 					//서버쪽 전체 디렉토리 탐색
+					fileTransfer.initTreeFileList();
 					getRemoteTree(fileTransfer.getTreeDirectory(fileTransfer.getRemoteHome()));
-					
+					remot_allDirectoryList = new ArrayList<Directory>();
 					remot_allDirectoryList.addAll(fileTransfer.getFileModel());
 					getRemoteTable(remot_allDirectoryList);
 				}
