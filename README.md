@@ -14,6 +14,7 @@
 
 + 깃허브를 통한 진행사항 및 이슈관리
 
+<br>
 
 ## 개발 파트
 1.  SFTP 연결
@@ -22,15 +23,21 @@
 4.  디렉토리 생성 및 삭제
 5.  업로드, 다운로드 기능
 
+<br>
+
 ## 개발 일정 관리
   + *Milestone   :  issue들의 그룹,  이정표로써 진행 상황을 표현*
   + *issue  :  프로젝트를 진행하면서 발생하는 모든 이슈 (버그 발생, 개발, 풀 리퀘스트 등등)*
   + *커밋 메세지를 통한 이슈 Close  처리 
   '''(Keyword] [Issue Number] [commit emssage (생략가능)]'''
+  
+  <br>
 
 ## 실행 화면
 
 ![image](https://user-images.githubusercontent.com/36910089/63744562-a77e2a80-c8da-11e9-9c4b-0ba902d2b575.png)
+
+<br>
 
 ## 📂 Directory structure
 
