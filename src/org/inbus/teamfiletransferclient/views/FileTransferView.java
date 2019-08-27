@@ -80,8 +80,10 @@ public class FileTransferView extends ViewPart {
 	private DirectoryModel treeModel;
 	private List<DirectoryModel> remot_allDirectoryList;
 	private List<File> local_allDirectoryList;
+	private List<DirectoryModel> directoryList;
 	private String absolutePath = "";
 	private FileTransferModel fileTransferModel = new FileTransferModel();
+	private String treePath;
 	
 	@Inject IWorkbench workbench;
 	private Text txt_host;
@@ -266,21 +268,29 @@ public class FileTransferView extends ViewPart {
 		btn_search.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				remot_allDirectoryList = new ArrayList<>();
-				TreeParent root = fileTransfer.remoteConnect(txt_host.getText(), txt_userName.getText(), txt_pwd.getText(), txt_port.getText());
-				TreeParent invisibleRoot = new TreeParent("", "");
-				invisibleRoot.addChild(root);
-				
 				remoteTRViewer.setContentProvider(new TreeViewContentProvider());
 				remoteTRViewer.setLabelProvider(new TreeViewLabelProvider(workbench));
-				remoteTRViewer.setInput(invisibleRoot);
-				remoteTRViewer.refresh();
-				
 				remoteTBViewer.setContentProvider(new ArrayContentProvider());
 				remoteTBViewer.setLabelProvider(new TableViewLabelProvider(workbench));
 				
+				 remot_allDirectoryList = new ArrayList<DirectoryModel>(); 
+				
+				getRemoteTree(fileTransfer.remoteConnect(txt_host.getText(), txt_userName.getText(), txt_pwd.getText(), txt_port.getText()));
+				
+				/*
+				 * TreeParent root = fileTransfer.remoteConnect(txt_host.getText(),
+				 * txt_userName.getText(), txt_pwd.getText(), txt_port.getText());
+				 * 
+				 * TreeParent invisibleRoot = new TreeParent("", "");
+				 * invisibleRoot.addChild(root); remoteTRViewer.setInput(invisibleRoot);
+				 * remoteTRViewer.refresh();
+				 */
+				
+				
 				remot_allDirectoryList.addAll(fileTransfer.getFileModel());
+				remoteTBViewer.setInput("");
 				remoteTBViewer.refresh();
+				getRemoteTable(remot_allDirectoryList);
 				remoteTBViewer.getControl().setFocus();
 			}
 		});
@@ -363,10 +373,9 @@ public class FileTransferView extends ViewPart {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				TreeItem item = (TreeItem) e.item;
 				
 				// ComboBox Remote Path
-				String treePath = ((TreeParent) e.item.getData()).getPath();
+				treePath = ((TreeParent) e.item.getData()).getPath();
 				combo_remotePath.setText(treePath);
 
 				// Path Log
@@ -384,23 +393,22 @@ public class FileTransferView extends ViewPart {
   				}
 				System.out.println("*****************************");
 				
+				getRemoteTable(remot_allDirectoryList);
 				
-				List<DirectoryModel> directoryList = new ArrayList<DirectoryModel>();
-				String path;
-					
-					for(DirectoryModel tfItem : remot_allDirectoryList) {
-						//Setting Path for display the table
-//						path = tfItem.getPath().split("/")[tfItem.getPath().split("/").length - 1];
-						path = tfItem.getPath();
-						//SubDirectories of selected the folder
-						if(item.getText().equals(path)) {
-							directoryList.add(tfItem);
-						}
-					}
-					
-					fileTransferModel.setRemotePath(treePath);
-					remoteTBViewer.setInput(directoryList);
-					remoteTBViewer.refresh();
+				/*
+				 * List<DirectoryModel> directoryList = new ArrayList<DirectoryModel>(); String
+				 * path;
+				 * 
+				 * for(DirectoryModel tfItem : remot_allDirectoryList) { //Setting Path for
+				 * display the table // path =
+				 * tfItem.getPath().split("/")[tfItem.getPath().split("/").length - 1]; path =
+				 * tfItem.getPath(); //SubDirectories of selected the folder
+				 * if(treePath.equals(path)) { directoryList.add(tfItem); } }
+				 * 
+				 * fileTransferModel.setRemotePath(treePath);
+				 * remoteTBViewer.setInput(directoryList); remoteTBViewer.refresh();
+				 */
+				 
 					
 					// count (label_remoteResult)
 					int fCount = 0;
@@ -442,8 +450,38 @@ public class FileTransferView extends ViewPart {
 		workbench.getHelpSystem().setHelp(remoteTBViewer.getControl(), "FileTransferView.remoteTBViewer");
 		getSite().setSelectionProvider(remoteTBViewer);
 		makeActions();
-//		localhookContextMenu();
-//		remotehookContextMenu();
+	}
+	
+	
+	//remote 트리 초기화 후 서버쪽 디렉토리 구조 가져오기
+	private void getRemoteTree(TreeParent root) {
+//		remot_allDirectoryList = new ArrayList<DirectoryModel>();
+//		fileTransfer.initTreeFileList();
+		TreeParent invisibleRoot = new TreeParent("", "");
+		invisibleRoot.addChild(root);
+		remoteTRViewer.setInput(invisibleRoot);
+		remoteTRViewer.refresh();
+	};
+	
+	//remote 테이블 초기화 후 경로 하위 파일 가져오기
+	
+	private void getRemoteTable(List<DirectoryModel> remoteAllDirList) {
+		directoryList = new ArrayList<DirectoryModel>();
+		String path;
+		for(DirectoryModel tfItem : remoteAllDirList) {
+			System.out.println(tfItem.toString());
+			//Setting Path for display the table
+//			path = tfItem.getPath().split("/")[tfItem.getPath().split("/").length - 1];
+			path = tfItem.getPath();
+			//SubDirectories of selected the folder
+			if(treePath.equals(path)) {
+				directoryList.add(tfItem);
+			}
+		}
+		
+		fileTransferModel.setRemotePath(treePath);
+		remoteTBViewer.setInput(directoryList);
+		remoteTBViewer.refresh();
 	}
 	
 	private void localhookContextMenu() {
@@ -541,7 +579,7 @@ public class FileTransferView extends ViewPart {
 					if(StringUtils.isBlank(dialog.getDirectoryName())) {
 						MessageDialog.openInformation(shell, "Warning", "폴더명을 입력하십시오!");
 					}else {
-						fileTransferModel.setCreatingDirName(dialog.getDirectoryName());
+						fileTransferModel.setDirName(dialog.getDirectoryName());
 						fileTransfer.utilfunction("newDirectory", fileTransferModel);
 						tableRefreshAction.run();
 					}
@@ -561,6 +599,40 @@ public class FileTransferView extends ViewPart {
 					localTBViewer.refresh();
 				}else {
 					//remote service
+					//서버 접속해서 디렉토리 가져온 후 테이블 refresh
+					/*
+					 * remot_allDirectoryList = new ArrayList<DirectoryModel>();
+					 * fileTransfer.initTreeFileList();
+					 */
+					//서버쪽 전체 디렉토리 탐색
+					getRemoteTree(fileTransfer.getTreeDirectory(fileTransfer.getRemoteHome()));
+					
+					/*
+					 * TreeParent root =
+					 * fileTransfer.getTreeDirectory(fileTransfer.getRemoteHome());
+					 * 
+					 * TreeParent invisibleRoot = new TreeParent("", "");
+					 * invisibleRoot.addChild(root); remoteTRViewer.setInput(invisibleRoot);
+					 * remoteTRViewer.refresh();
+					 */
+					
+					remot_allDirectoryList.addAll(fileTransfer.getFileModel());
+					getRemoteTable(remot_allDirectoryList);
+					
+					/*
+					 * List<DirectoryModel> directoryList = new ArrayList<DirectoryModel>(); String
+					 * path;
+					 * 
+					 * for(DirectoryModel tfItem : remot_allDirectoryList) { //Setting Path for
+					 * display the table // path =
+					 * tfItem.getPath().split("/")[tfItem.getPath().split("/").length - 1]; path =
+					 * tfItem.getPath(); //SubDirectories of selected the folder
+					 * if(treePath.equals(path)) { directoryList.add(tfItem); } }
+					 * 
+					 * fileTransferModel.setRemotePath(treePath);
+					 * 
+					 * remoteTBViewer.setInput(directoryList); remoteTBViewer.refresh();
+					 */
 				}
 			}
 		};
@@ -584,6 +656,9 @@ public class FileTransferView extends ViewPart {
 
 				}else {
 					//remote service
+					fileTransferModel.setDirName(fileTransferModel.getRemoteFileName());
+					fileTransfer.utilfunction("delDirectory", fileTransferModel);
+					tableRefreshAction.run();
 				}
 			}
 		};

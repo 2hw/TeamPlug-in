@@ -15,7 +15,7 @@ public class FileTransferModel {
 	private String localPath;		//다운받을 곳의 경로
 	private String localFileName;	//업로드할 파일명
 	private String commonActionFlag;//공통액션 테이블구분(local | remote)
-	private String creatingDirName;	//만들어질 디렉토리이름
+	private String dirName;	//서버 폴더명 (create or delete)
 	
 	public String getRemotePath() {
 		return remotePath;
@@ -47,11 +47,11 @@ public class FileTransferModel {
 	public void setCommonActionFlag(String commonActionFlag) {
 		this.commonActionFlag = commonActionFlag;
 	}
-	public String getCreatingDirName() {
-		return creatingDirName;
+	public String getDirName() {
+		return dirName;
 	}
-	public void setCreatingDirName(String creatingDirName) {
-		this.creatingDirName = creatingDirName;
+	public void setDirName(String dirName) {
+		this.dirName = dirName;
 	}
 	
 }
