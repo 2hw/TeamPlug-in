@@ -44,12 +44,12 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.part.ViewPart;
-import org.inbus.teamfiletransferclient.core.FileTransfer;
+import org.inbus.teamfiletransferclient.core.FileTransferCore;
 import org.inbus.teamfiletransferclient.impl.TableViewLabelProvider;
 import org.inbus.teamfiletransferclient.impl.TreeViewContentProvider;
 import org.inbus.teamfiletransferclient.impl.TreeViewLabelProvider;
-import org.inbus.teamfiletransferclient.model.DirectoryModel;
-import org.inbus.teamfiletransferclient.model.FileTransferModel;
+import org.inbus.teamfiletransferclient.model.Directory;
+import org.inbus.teamfiletransferclient.model.FileTransfer;
 import org.inbus.teamfiletransferclient.model.TreeParent;
 
 
@@ -76,13 +76,13 @@ public class FileTransferView extends ViewPart {
 	private TreeViewer remoteTRViewer;
 	private TableViewer remoteTBViewer;
 	
-	private FileTransfer fileTransfer = new FileTransfer();
-	private DirectoryModel treeModel;
-	private List<DirectoryModel> remot_allDirectoryList;
+	private FileTransferCore fileTransfer = new FileTransferCore();
+	private Directory treeModel;
+	private List<Directory> remot_allDirectoryList;
 	private List<File> local_allDirectoryList;
-	private List<DirectoryModel> directoryList;
+	private List<Directory> directoryList;
 	private String absolutePath = "";
-	private FileTransferModel fileTransferModel = new FileTransferModel();
+	private FileTransfer fileTransferModel = new FileTransfer();
 	private String treePath;
 	
 	@Inject IWorkbench workbench;
@@ -273,7 +273,7 @@ public class FileTransferView extends ViewPart {
 				remoteTBViewer.setContentProvider(new ArrayContentProvider());
 				remoteTBViewer.setLabelProvider(new TableViewLabelProvider(workbench));
 				
-				 remot_allDirectoryList = new ArrayList<DirectoryModel>(); 
+				 remot_allDirectoryList = new ArrayList<Directory>(); 
 				
 				getRemoteTree(fileTransfer.remoteConnect(txt_host.getText(), txt_userName.getText(), txt_pwd.getText(), txt_port.getText()));
 				
@@ -413,7 +413,7 @@ public class FileTransferView extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TableItem tableItem = (TableItem) e.item;
-				DirectoryModel fileModel = (DirectoryModel) tableItem.getData();
+				Directory fileModel = (Directory) tableItem.getData();
 				fileTransferModel.setRemoteFileName(fileModel.getName());
 				remotehookContextMenu();
 			}
@@ -438,10 +438,10 @@ public class FileTransferView extends ViewPart {
 	
 	//remote 테이블 초기화 후 경로 하위 파일 가져오기
 	
-	private void getRemoteTable(List<DirectoryModel> remoteAllDirList) {
-		directoryList = new ArrayList<DirectoryModel>();
+	private void getRemoteTable(List<Directory> remoteAllDirList) {
+		directoryList = new ArrayList<Directory>();
 		String path;
-		for(DirectoryModel tfItem : remoteAllDirList) {
+		for(Directory tfItem : remoteAllDirList) {
 			System.out.println(tfItem.toString());
 			//Setting Path for display the table
 //			path = tfItem.getPath().split("/")[tfItem.getPath().split("/").length - 1];

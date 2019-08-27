@@ -12,7 +12,7 @@ import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
-import org.inbus.teamfiletransferclient.model.DirectoryModel;
+import org.inbus.teamfiletransferclient.model.Directory;
 
 /**
  * Table에 표시될 데이터를 제어하는 클래스
@@ -57,9 +57,9 @@ public class TableViewLabelProvider implements ITableLabelProvider{
 				File file = (File) element;
 				return IconImageUtil.getImage(display, file);
 				
-			}else if(element instanceof DirectoryModel) {
+			}else if(element instanceof Directory) {
 				
-				DirectoryModel remoteFile = (DirectoryModel) element;
+				Directory remoteFile = (Directory) element;
 //				
 				if(remoteFile.isFolder()) {
 					imageKey = ISharedImages.IMG_OBJ_FOLDER;
@@ -93,9 +93,9 @@ public class TableViewLabelProvider implements ITableLabelProvider{
 				return String.valueOf(sf.format(file.lastModified()));
 			}
 			
-		}else if(element instanceof DirectoryModel) {
+		}else if(element instanceof Directory) {
 			
-			DirectoryModel treeFileModel = (DirectoryModel) element;
+			Directory treeFileModel = (Directory) element;
 
 			switch (idx) {
 			case 0:

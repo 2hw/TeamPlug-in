@@ -9,7 +9,7 @@ package org.inbus.teamfiletransferclient.model;
 * @since 2019.08.06
 */
 
-public class DirectoryModel {
+public class Directory {
 	
 	private String name;			//이름 
 	private int size;				//크기 
@@ -22,7 +22,7 @@ public class DirectoryModel {
 	
 	public static String[] COLUMN_HEADER = new String[] {"파일명", "크기", "최종수정" ,"권한", "소유자/그룹"};
 	
-	public DirectoryModel(String name, int size, String modified_date, String permission,
+	public Directory(String name, int size, String modified_date, String permission,
 			String user_group, String path) {
 		super();
 		this.name = name;
@@ -39,7 +39,7 @@ public class DirectoryModel {
 		this.path = path;
 	}
 	
-	public DirectoryModel(String name, int size, String modified_date, String path) {
+	public Directory(String name, int size, String modified_date, String path) {
 		super();
 		this.name = name;
 		this.size = size;

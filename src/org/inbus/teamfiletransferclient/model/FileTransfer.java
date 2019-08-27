@@ -9,7 +9,7 @@ package org.inbus.teamfiletransferclient.model;
 * @since 2019.08.06
 */
 
-public class FileTransferModel {
+public class FileTransfer {
 	private String remotePath;		//업로드할 곳의 경로
 	private String remoteFileName;	//다운받을 파일명
 	private String localPath;		//다운받을 곳의 경로
