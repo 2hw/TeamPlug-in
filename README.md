@@ -26,7 +26,12 @@
 <br>
 
 ## 개발 일정 관리
-  + *Milestone   :  issue들의 그룹,  이정표로써 진행 상황을 표현*
+> 개발 일정을 GITHUB의 Milestones과 Issue로관리
+
+![image](https://user-images.githubusercontent.com/38846776/63754756-5d07a880-c8f0-11e9-9fad-e49740c5084c.png)
+ + *Milestone   :  issue들의 그룹,  이정표로써 진행 상황을 표현*
+  
+![image](https://user-images.githubusercontent.com/38846776/63754982-bb348b80-c8f0-11e9-8d0a-4ac9ad07ad30.png)
   + *issue  :  프로젝트를 진행하면서 발생하는 모든 이슈 (버그 발생, 개발, 풀 리퀘스트 등등)*
   + *커밋 메세지를 통한 이슈 Close  처리 
   '''(Keyword] [Issue Number] [commit emssage (생략가능)]'''
