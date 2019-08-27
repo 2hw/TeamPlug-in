@@ -32,21 +32,21 @@ FileTransfer 												#프로젝트
 │               │      FileTransferCore.java 												#컨트롤러
 │               │
 │               ├─exceptions
-│               │      InvalidServerInformationException.java 												#예외 처리
+│               │      InvalidServerInformationException.java 										#예외 처리
 │               │
 │               ├─impl
-│               │      IconImageUtil.java 												                                  #아이콘을 표시하는 Util 클래스
-│               │      SFTPUtil.java 												#SFTP 연결 클래스 
-│               │      TableViewLabelProvider.java 												#Table에 표시되는 데이터 제어 클래스
-│               │      TreeViewContentProvider.java 												#Tree에 보여질 노드를 리턴하는 클래스
-│               │      TreeViewLabelProvider.java 												#Tree에 표시될 노드 제어 클래스
+│               │      IconImageUtil.java 												                                #아이콘을 표시하는 Util 클래스
+│               │      SFTPUtil.java 												                                         #SFTP 연결 클래스 
+│               │      TableViewLabelProvider.java 												               #Table에 표시되는 데이터 제어 클래스
+│               │      TreeViewContentProvider.java 												            #Tree에 보여질 노드를 리턴하는 클래스
+│               │      TreeViewLabelProvider.java 											 	                #Tree에 표시될 노드 제어 클래스
 │               │
 │               ├─model
-│               │      ConnectionInfoModel.java 												#FTP 접속 정보 VO
-│               │      DirectoryModel.java 												#접속한 서버의 디렉터리 VO
+│               │      ConnectionInfoModel.java 						#FTP 접속 정보 VO
+│               │      DirectoryModel.java 												    #접속한 서버의 디렉터리 VO
 │               │      FileTransferModel.java 												#접속한 서버의 파일 정보 VO
-│               │      TreeObject.java 												#Tree VO
-│               │      TreeParent.java 												#하위 Tree VO
+│               │      TreeObject.java 												            #Tree VO
+│               │      TreeParent.java 												            #하위 Tree VO
 │               │
 │               └─views
 │                       FileTransferView.java 												#플러그인 메인 뷰
