@@ -36,7 +36,7 @@
   
 ![image](https://user-images.githubusercontent.com/38846776/63754982-bb348b80-c8f0-11e9-8d0a-4ac9ad07ad30.png)
   + *issue  :  프로젝트를 진행하면서 발생하는 모든 이슈 (버그 발생, 개발, 풀 리퀘스트 등등)*
-  + *커밋 메세지를 통한 이슈 Close  처리*  ``` (Keyword] [Issue Number] [commit emssage (생략가능)]```
+  + *커밋 메세지를 통한 이슈 Close  처리*   ->  ``` (Keyword] [Issue Number] [commit emssage (생략가능)]```
 
 
  
@@ -85,13 +85,13 @@ FileTransfer 												 #프로젝트
 │               │
 │               └─views
 │                       FileTransferView.java 					 #플러그인 메인 뷰
-|					  NewDirectoryDialog.java
+│			                    NewDirectoryDialog.java
 ├─lib
 │      commons-lang-2.6.jar
 │      jsch-0.1.55.jar										   #SFTP 라이브러리
 │
 ├─META-INF
-│      MANIFEST.MF
+│    MANIFEST.MF
 │  .classpath
 │  .gitignore
 │  .project
