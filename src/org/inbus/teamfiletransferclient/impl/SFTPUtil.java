@@ -29,7 +29,7 @@ public class SFTPUtil{
     private Session session = null;
     private Channel channel = null;
     private ChannelSftp channelSftp = null;
-
+    static String PATHSEPARATOR = "/";
     /**
      * 서버와 연결에 필요한 값들을 가져와 초기화 시킴
      *
@@ -138,7 +138,59 @@ public class SFTPUtil{
         }
 
     }
+    
+    
+    /**
+     * This method is called recursively to Upload the local folder content to
+     * SFTP server
+     * 
+     * @param sourcePath
+     * @param destinationPath
+     * @throws SftpException
+     * @throws FileNotFoundException 
+     */
+    public void recursiveFolderUpload(String sourcePath, String destinationPath) throws SftpException, FileNotFoundException {
+        
+        File sourceFile = new File(sourcePath);
+        if (sourceFile.isFile()) {
+            
+            // copy if it is a file
+            channelSftp.cd(destinationPath);
+            if (!sourceFile.getName().startsWith("."))
+                channelSftp.put(new FileInputStream(sourceFile), sourceFile.getName(), ChannelSftp.OVERWRITE);
+            
+        } else {
+            
+            System.out.println("inside else " + sourceFile.getName());
+            File[] files = sourceFile.listFiles();
 
+            if (files != null && !sourceFile.getName().startsWith(".")) {
+
+                channelSftp.cd(destinationPath);
+                SftpATTRS attrs = null;
+
+                // check if the directory is already existing
+                try {
+                    attrs = channelSftp.stat(destinationPath + PATHSEPARATOR + sourceFile.getName());
+                } catch (Exception e) {
+                    System.out.println(destinationPath + PATHSEPARATOR + sourceFile.getName() + " not found");
+                }
+
+                // else create a directory
+                if (attrs != null) {
+                    System.out.println("Directory exists IsDir=" + attrs.isDir());
+                } else {
+                    System.out.println("Creating dir " + sourceFile.getName());
+                    channelSftp.mkdir(sourceFile.getName());
+                }
+
+                for (File f: files) {
+                    recursiveFolderUpload(f.getAbsolutePath(), destinationPath + PATHSEPARATOR + sourceFile.getName());
+                }
+
+            }
+        }
+	}
 
 
     /**
@@ -194,6 +246,36 @@ public class SFTPUtil{
     }
 
     /**
+     * This method is called recursively to download the folder content from SFTP server
+     * 
+     * @param sourcePath
+     * @param destinationPath
+     * @throws SftpException
+     */
+    @SuppressWarnings("unchecked")
+    public void recursiveFolderDownload(String sourcePath, String destinationPath) throws SftpException {
+        Vector<ChannelSftp.LsEntry> fileAndFolderList = channelSftp.ls(sourcePath); // Let list of folder content
+        
+        //Iterate through list of folder content
+        for (ChannelSftp.LsEntry item : fileAndFolderList) {
+            
+            if (!item.getAttrs().isDir()) { // Check if it is a file (not a directory).
+                if (!(new File(destinationPath + PATHSEPARATOR + item.getFilename())).exists()
+                       ) { // Download only if changed later.
+
+                    new File(destinationPath + PATHSEPARATOR + item.getFilename());
+                    channelSftp.get(sourcePath + PATHSEPARATOR + item.getFilename(),
+                            destinationPath + PATHSEPARATOR + item.getFilename()); // Download file from source (source filename, destination filename).
+                }
+            } else if (!(".".equals(item.getFilename()) || "..".equals(item.getFilename()))) {
+                new File(destinationPath + PATHSEPARATOR + item.getFilename()).mkdirs(); // Empty folder copy.
+                recursiveFolderDownload(sourcePath + PATHSEPARATOR + item.getFilename(),
+                        destinationPath + PATHSEPARATOR + item.getFilename()); // Enter found folder on server to read its contents and create locally.
+            }
+        }
+    }
+    
+    /**
      * 하나의 폴더를 만든다.
      *
      * @param dir 폴더명(서버)
@@ -204,13 +286,7 @@ public class SFTPUtil{
     
     public void createDir(String dir, String path) throws Exception{
 
-    		//만들 폴더가 존재할 경우
-    		if(channelSftp.stat(path + "/" + dir).isDir()) {
-    			System.out.println("Directory exists the " + dir);
-    			throw new Exception("Directory exists the " + dir);
-    		}else {
     			channelSftp.mkdir(path + "/" + dir);
-    		}
     }
     
     /**

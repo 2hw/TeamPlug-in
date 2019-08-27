@@ -223,14 +223,16 @@ public class FileTransferCore {
 				
 				switch (selectAction) {
 				case "upload":
-					File uploadFile = new File(fileTransferModel.getLocalPath() + "/" + fileTransferModel.getLocalFileName());
-					util.upload(fileTransferModel.getRemotePath(), uploadFile);
+//					File uploadFile = new File(fileTransferModel.getLocalPath() + "/" + fileTransferModel.getLocalFileName());
+//					util.upload(fileTransferModel.getRemotePath(), uploadFile);
+					util.recursiveFolderUpload(fileTransferModel.getLocalPath() + "/" + fileTransferModel.getLocalFileName(), fileTransferModel.getRemotePath());
 					System.out.println("=> File uploading success the " + fileTransferModel.getLocalFileName());
 					break;
 
 				case "download":
-					util.download(fileTransferModel.getRemotePath(), fileTransferModel.getRemoteFileName(), fileTransferModel.getLocalPath());
-					System.out.println("=> File downloading success the " + fileTransferModel.getRemoteFileName());
+//					util.download(fileTransferModel.getRemotePath(), fileTransferModel.getRemoteFileName(), fileTransferModel.getLocalPath());
+//					System.out.println("=> File downloading success the " + fileTransferModel.getRemoteFileName());
+					util.recursiveFolderDownload(fileTransferModel.getRemotePath() + "/" + fileTransferModel.getRemoteFileName(), fileTransferModel.getLocalPath());
 					break;
 					
 				case "newDirectory":
