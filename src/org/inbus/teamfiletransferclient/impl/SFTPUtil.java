@@ -193,28 +193,51 @@ public class SFTPUtil{
         }
     }
 
-    public void createDir(String dir, String path) {
-    	SftpATTRS attrs=null;
+    /**
+     * 하나의 폴더를 만든다.
+     *
+     * @param dir 폴더명(서버)
+     * @param path 저장될 공간
+     * @return
+     * @exception 
+     */
+    
+    public void createDir(String dir, String path) throws Exception{
 
+    		//만들 폴더가 존재할 경우
+    		if(channelSftp.stat(path + "/" + dir).isDir()) {
+    			System.out.println("Directory exists the " + dir);
+    			throw new Exception("Directory exists the " + dir);
+    		}else {
+    			channelSftp.mkdir(path + "/" + dir);
+    		}
+    }
+    
+    /**
+     * 하나의 폴더를 삭제한다.
+     *
+     * @param dir 폴더명(서버)
+     * @param path 저장될 공간
+     * @return
+     * @exception 
+     */
+    
+    public void deleteDir(String dir, String path) {
     	try {
-    		System.out.println(path + "/" + dir);
-    	    attrs = channelSftp.stat(path + "/" + dir);
-
-    	    if (attrs != null) {
-    	    	
-    	    	System.out.println("Directory exists IsDir="+attrs.isDir());
-    	    	
-    	    } else {
-    	    	
-    	    	System.out.println("Creating dir "+dir);
-    	    	
-    	    	channelSftp.mkdir(dir);
-    	    }
-    	} catch (SftpException e) {
-
-            e.printStackTrace();
-
-        } 
+    		
+    		if(channelSftp.stat(path + "/" + dir).isDir()) {
+    			
+    			channelSftp.rmdir(path + "/" + dir);
+    		}else {
+    			channelSftp.rm(path + "/" + dir);
+    			
+    		}
+	    	System.out.println("Delete dir " + dir);
+		} catch (SftpException e) {
+	
+	        e.printStackTrace();
+	
+	    } 
     }
     
     /**

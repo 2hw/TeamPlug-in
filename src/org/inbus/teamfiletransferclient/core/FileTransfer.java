@@ -29,8 +29,8 @@ public class FileTransfer {
 	
 	private ConnectionInfoModel connectionInfoModel = new ConnectionInfoModel();
 	private SFTPUtil util = new SFTPUtil();
-	private List<DirectoryModel> tfList;
-	private String remoteHome = "/";
+	private List<DirectoryModel> treeFileList;
+	private String remoteHome = "/test";
 	private boolean rootFlag = true;
 	
 	private String pattern = "(.+)\\s+(\\d+)\\s+(\\S+\\s+\\S+)\\s+(\\d+)\\s+(.+\\s+\\d+\\s+[\\d:]+)\\s+(.*)";
@@ -53,7 +53,8 @@ public class FileTransfer {
      * @exception 
      */
 	public TreeParent remoteConnect(String host, String userName, String password, String port) {
-		tfList = new ArrayList<DirectoryModel>();
+		
+		initTreeFileList();
 		
 		try {
 			checkConnectionInfo(host);
@@ -88,12 +89,12 @@ public class FileTransfer {
      */
 	public TreeParent getTreeDirectory(String path) {
 		String name = "";
-		if(rootFlag) {
-			name = path;
-			rootFlag = false;
-		} else {
+//		if(rootFlag) {
+//			name = path;
+//			rootFlag = false;
+//		} else {
 			name = path.split("/")[path.split("/").length - 1];
-		}
+//		}
 		
 		// 1. 파일 객체 생성 (path 정보를 가지는 파일 만듬)
 		// 현재 경로를 파일 객체로 생성
@@ -120,6 +121,7 @@ public class FileTransfer {
 	 */
 	
 	public List<DirectoryModel> getFileSystem(String path) {
+		
 		
 		List<DirectoryModel> folders = new ArrayList<DirectoryModel>();		// 폴더 리스트
 		List<DirectoryModel> files = new ArrayList<DirectoryModel>();		// 파일 리스트
@@ -154,7 +156,7 @@ public class FileTransfer {
 					}
 				}
 				
-				tfList.add(tfModel);
+				treeFileList.add(tfModel);
 				
 				if (oListItem.getAttrs().isDir()) {
 					folders.add(tfModel);
@@ -174,7 +176,7 @@ public class FileTransfer {
      * @exception 
      */
 	public List<DirectoryModel> getFileModel() {
-		return tfList;
+		return treeFileList;
 	}
 	
 	private boolean checkConnectionInfo(String param) throws Exception{
@@ -236,13 +238,26 @@ public class FileTransfer {
 					//create new directory
 					if(fileTransferModel.getCommonActionFlag().equals("local")) {
 						
-						File file = new File(fileTransferModel.getLocalPath()+ "/" +fileTransferModel.getCreatingDirName());
+						File file = new File(fileTransferModel.getLocalPath()+ "/" +fileTransferModel.getDirName());
 						file.mkdir();
 					}
 					else {
-						util.createDir(fileTransferModel.getCreatingDirName(), fileTransferModel.getRemotePath());
+						util.createDir(fileTransferModel.getDirName(), fileTransferModel.getRemotePath());
 					}
-					System.out.println("=> Create directory success the " + fileTransferModel.getCreatingDirName());
+					System.out.println("=> Create directory success the " + fileTransferModel.getDirName());
+					break;
+				case "delDirectory":
+					//commonAction(local or remote)
+					//delete directory
+					if(fileTransferModel.getCommonActionFlag().equals("local")) {
+						
+						File file = new File(fileTransferModel.getLocalPath()+ "/" +fileTransferModel.getDirName());
+						file.delete();
+					}
+					else {
+						util.deleteDir(fileTransferModel.getDirName(), fileTransferModel.getRemotePath());
+					}
+					System.out.println("=> Delete directory success the " + fileTransferModel.getDirName());
 					break;
 				}
 //			}
@@ -278,5 +293,13 @@ public class FileTransfer {
 		}
 		return true;
 	}
+
+	public void initTreeFileList() {
+		treeFileList = new ArrayList<DirectoryModel>();
+	}
 	
+	public String getRemoteHome() {
+		return remoteHome;
+	}
+
 }
