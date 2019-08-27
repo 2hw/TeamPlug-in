@@ -255,19 +255,25 @@ public class SFTPUtil{
     @SuppressWarnings("unchecked")
     public void recursiveFolderDownload(String sourcePath, String destinationPath) throws SftpException {
         Vector<ChannelSftp.LsEntry> fileAndFolderList = channelSftp.ls(sourcePath); // Let list of folder content
-        
         //Iterate through list of folder content
         for (ChannelSftp.LsEntry item : fileAndFolderList) {
             
             if (!item.getAttrs().isDir()) { // Check if it is a file (not a directory).
-                if (!(new File(destinationPath + PATHSEPARATOR + item.getFilename())).exists()
-                       ) { // Download only if changed later.
-
-                    new File(destinationPath + PATHSEPARATOR + item.getFilename());
-                    channelSftp.get(sourcePath + PATHSEPARATOR + item.getFilename(),
-                            destinationPath + PATHSEPARATOR + item.getFilename()); // Download file from source (source filename, destination filename).
+            	
+            	if (!(new File(destinationPath + PATHSEPARATOR + item.getFilename())).exists()
+                        || (item.getAttrs().getMTime() > Long
+                                .valueOf(new File(destinationPath + PATHSEPARATOR + item.getFilename()).lastModified()
+                                        / (long) 1000)
+                                .intValue())) { // Download only if changed later.
+            		if(!item.getFilename().startsWith(".")) {
+            			
+            			new File(destinationPath + PATHSEPARATOR + item.getFilename());
+            			channelSftp.get(sourcePath + PATHSEPARATOR + item.getFilename(),
+            					destinationPath + PATHSEPARATOR + item.getFilename()); // Download file from source (source filename, destination filename).
+            		}
                 }
-            } else if (!(".".equals(item.getFilename()) || "..".equals(item.getFilename()))) {
+                
+            } else if (!(".".equals(item.getFilename()) || "..".equals(item.getFilename()) || item.getFilename().startsWith("."))) {
                 new File(destinationPath + PATHSEPARATOR + item.getFilename()).mkdirs(); // Empty folder copy.
                 recursiveFolderDownload(sourcePath + PATHSEPARATOR + item.getFilename(),
                         destinationPath + PATHSEPARATOR + item.getFilename()); // Enter found folder on server to read its contents and create locally.

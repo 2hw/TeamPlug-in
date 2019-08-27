@@ -31,7 +31,6 @@ public class FileTransferCore {
 	private SFTPUtil util = new SFTPUtil();
 	private List<Directory> treeFileList;
 	private String remoteHome = "/test";
-	private boolean rootFlag = true;
 	
 	private String pattern = "(.+)\\s+(\\d+)\\s+(\\S+\\s+\\S+)\\s+(\\d+)\\s+(.+\\s+\\d+\\s+[\\d:]+)\\s+(.*)";
 	private Pattern ptrn = Pattern.compile(pattern);
@@ -88,13 +87,7 @@ public class FileTransferCore {
      * @exception 
      */
 	public TreeParent getTreeDirectory(String path) {
-		String name = "";
-//		if(rootFlag) {
-//			name = path;
-//			rootFlag = false;
-//		} else {
-			name = path.split("/")[path.split("/").length - 1];
-//		}
+		String name = path.split("/")[path.split("/").length - 1];
 		
 		// 1. 파일 객체 생성 (path 정보를 가지는 파일 만듬)
 		// 현재 경로를 파일 객체로 생성
@@ -232,7 +225,22 @@ public class FileTransferCore {
 				case "download":
 //					util.download(fileTransferModel.getRemotePath(), fileTransferModel.getRemoteFileName(), fileTransferModel.getLocalPath());
 //					System.out.println("=> File downloading success the " + fileTransferModel.getRemoteFileName());
-					util.recursiveFolderDownload(fileTransferModel.getRemotePath() + "/" + fileTransferModel.getRemoteFileName(), fileTransferModel.getLocalPath());
+					
+					String remoteFullFilePath = fileTransferModel.getRemotePath() + "/" + fileTransferModel.getRemoteFileName();
+					//remote 경로에 같은 이름 찾아서 폴더인지 확인
+					for(Directory dirItem : treeFileList) {
+						
+						String treeItem = dirItem.getPath()  + "/" + dirItem.getName();
+						
+						if(treeItem.equals(remoteFullFilePath)) {
+							if(dirItem.isFolder()) {
+								new File(fileTransferModel.getLocalPath() + "/" + fileTransferModel.getRemoteFileName());
+								util.recursiveFolderDownload(remoteFullFilePath, fileTransferModel.getLocalPath() + "/" + fileTransferModel.getRemoteFileName());
+							}else {
+								util.download(fileTransferModel.getRemotePath(), fileTransferModel.getRemoteFileName(), fileTransferModel.getLocalPath());
+							}
+						}
+					}
 					break;
 					
 				case "newDirectory":

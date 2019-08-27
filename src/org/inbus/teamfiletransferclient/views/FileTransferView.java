@@ -121,7 +121,7 @@ public class FileTransferView extends ViewPart {
 		label_host.setText("호스트");
 		
 		txt_host = new Text(group_connect, SWT.BORDER);
-		txt_host.setText("210.103.215.37");
+		txt_host.setText("192.168.0.13");
 		txt_host.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label label_pwd = new Label(group_connect, SWT.NONE);
@@ -527,6 +527,7 @@ public class FileTransferView extends ViewPart {
 			public void run() {
 				//File upload
 				fileTransfer.utilfunction("upload", fileTransferModel);
+				fileTransferModel.setCommonActionFlag("remote");
 				tableRefreshAction.run();
 			}
 		};
@@ -536,6 +537,7 @@ public class FileTransferView extends ViewPart {
 			public void run() {
 				//File download
 				fileTransfer.utilfunction("download", fileTransferModel);
+				fileTransferModel.setCommonActionFlag("local");
 				tableRefreshAction.run();
 			}
 		};
