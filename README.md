@@ -86,13 +86,13 @@ FileTransfer 												 #프로젝트
 │               │
 │               └─views
 │                       FileTransferView.java 					 #플러그인 메인 뷰
-|					  NewDirectoryDialog.java
+│				                   NewDirectoryDialog.java
 ├─lib
 │      commons-lang-2.6.jar
 │      jsch-0.1.55.jar										   #SFTP 라이브러리
 │
 ├─META-INF
-│      MANIFEST.MF
+│   MANIFEST.MF
 │  .classpath
 │  .gitignore
 │  .project
