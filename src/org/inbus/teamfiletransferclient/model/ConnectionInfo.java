@@ -9,17 +9,17 @@ package org.inbus.teamfiletransferclient.model;
 * @since 2019.08.06
 */
 
-public class ConnectionInfoModel {
+public class ConnectionInfo {
 	
 	private String host;		//호스트
 	private String userName;	//사용자명
 	private String password;	//비밀번호
 	private int port;			//포트번호
 	
-	public ConnectionInfoModel() {
+	public ConnectionInfo() {
 	}
 
-	public ConnectionInfoModel(String host, String userName, String password, int port) {
+	public ConnectionInfo(String host, String userName, String password, int port) {
 		super();
 		this.host = host;
 		this.userName = userName;

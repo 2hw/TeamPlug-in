@@ -10,9 +10,9 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.inbus.teamfiletransferclient.exceptions.InvalidServerInformationException;
 import org.inbus.teamfiletransferclient.impl.SFTPUtil;
-import org.inbus.teamfiletransferclient.model.ConnectionInfoModel;
-import org.inbus.teamfiletransferclient.model.DirectoryModel;
-import org.inbus.teamfiletransferclient.model.FileTransferModel;
+import org.inbus.teamfiletransferclient.model.ConnectionInfo;
+import org.inbus.teamfiletransferclient.model.Directory;
+import org.inbus.teamfiletransferclient.model.FileTransfer;
 import org.inbus.teamfiletransferclient.model.TreeParent;
 
 import com.jcraft.jsch.ChannelSftp;
@@ -25,11 +25,11 @@ import com.jcraft.jsch.ChannelSftp;
  * @since 2019.08.06
  */
 
-public class FileTransfer {
+public class FileTransferCore {
 	
-	private ConnectionInfoModel connectionInfoModel = new ConnectionInfoModel();
+	private ConnectionInfo connectionInfoModel = new ConnectionInfo();
 	private SFTPUtil util = new SFTPUtil();
-	private List<DirectoryModel> treeFileList;
+	private List<Directory> treeFileList;
 	private String remoteHome = "/test";
 	private boolean rootFlag = true;
 	
@@ -101,9 +101,9 @@ public class FileTransfer {
 		
 		TreeParent retTP = new TreeParent(name, path);
 		
-		List<DirectoryModel> TFMList = getFileSystem(path);
+		List<Directory> TFMList = getFileSystem(path);
 		
-		for(DirectoryModel tfm : TFMList) {
+		for(Directory tfm : TFMList) {
 			
 			if(tfm.isFolder())
 				retTP.addChild(getTreeDirectory(path + "/" + tfm.getName()));
@@ -120,11 +120,11 @@ public class FileTransfer {
 	 * @return TreeFileModel 리스트 반환
 	 */
 	
-	public List<DirectoryModel> getFileSystem(String path) {
+	public List<Directory> getFileSystem(String path) {
 		
 		
-		List<DirectoryModel> folders = new ArrayList<DirectoryModel>();		// 폴더 리스트
-		List<DirectoryModel> files = new ArrayList<DirectoryModel>();		// 파일 리스트
+		List<Directory> folders = new ArrayList<Directory>();		// 폴더 리스트
+		List<Directory> files = new ArrayList<Directory>();		// 파일 리스트
 		
 		Vector<ChannelSftp.LsEntry> list = util.getFileList(path);
 		
@@ -139,7 +139,7 @@ public class FileTransfer {
 				if(matcher.group(6).equals(".") || matcher.group(6).equals(".."))
 					continue;
 				
-				DirectoryModel tfModel = new DirectoryModel(
+				Directory tfModel = new Directory(
 						matcher.group(6),					// name
         				Integer.parseInt(matcher.group(4)),	// size
         				matcher.group(5),					// modified date
@@ -175,7 +175,7 @@ public class FileTransfer {
      * @return 경로안에 디렉토리 구조를 DirectoryModel 리스트 반환
      * @exception 
      */
-	public List<DirectoryModel> getFileModel() {
+	public List<Directory> getFileModel() {
 		return treeFileList;
 	}
 	
@@ -217,7 +217,7 @@ public class FileTransfer {
      * @return void
      * @exception 
      */
-	public void utilfunction(String selectAction, FileTransferModel fileTransferModel) {
+	public void utilfunction(String selectAction, FileTransfer fileTransferModel) {
 		try {
 //			if(checkBlank(fileTransferModel.getRemotePath(), fileTransferModel.getLocalPath())) {
 				
@@ -295,7 +295,7 @@ public class FileTransfer {
 	}
 
 	public void initTreeFileList() {
-		treeFileList = new ArrayList<DirectoryModel>();
+		treeFileList = new ArrayList<Directory>();
 	}
 	
 	public String getRemoteHome() {
