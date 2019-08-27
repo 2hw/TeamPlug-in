@@ -4,11 +4,11 @@
 
 ## 개발 환경
 
- [![license](https://img.shields.io/badge/java-1.8-yellow)](https://img.shields.io/badge/java-1.8-yellow) [![license](https://img.shields.io/badge/eclipse-4.10-green)](https://img.shields.io/badge/eclipse-4.10-green)[![license](https://img.shields.io/badge/windowbuilder-1.9.1-blue)](https://img.shields.io/badge/windowbuilder-1.9.1-blue)
+ [![license](https://img.shields.io/badge/java-1.8-yellow)](https://img.shields.io/badge/java-1.8-yellow) [![license](https://img.shields.io/badge/eclipse-4.10-green)](https://img.shields.io/badge/eclipse-4.10-green) [![license](https://img.shields.io/badge/windowbuilder-1.9.1-blue)](https://img.shields.io/badge/windowbuilder-1.9.1-blue)
 
 ## 협업 환경 
 
-[![license](https://img.shields.io/badge/git-2.22-yellow.svg)](https://img.shields.io/badge/git-2.22-yellow)[![license](https://img.shields.io/badge/github-github.com%2F2hw%2FTeamPlug--in-green.svg)](https://img.shields.io/badge/github-github.com%2F2hw%2FTeamPlug--in-green)[![license](https://img.shields.io/badge/sourceTree-3.13-blue.svg)](https://img.shields.io/badge/sourceTree-3.13-blue)
+[![license](https://img.shields.io/badge/git-2.22-yellow.svg)](https://img.shields.io/badge/git-2.22-yellow) [![license](https://img.shields.io/badge/github-github.com%2F2hw%2FTeamPlug--in-green.svg)](https://img.shields.io/badge/github-github.com%2F2hw%2FTeamPlug--in-green) [![license](https://img.shields.io/badge/sourceTree-3.13-blue.svg)](https://img.shields.io/badge/sourceTree-3.13-blue)
 
 + 깃허브를 통한 진행사항 및 이슈관리
   + *Milestone   :  issue들의 그룹,  이정표로써 진행 상황을 표현*
