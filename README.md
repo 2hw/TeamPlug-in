@@ -67,15 +67,6 @@
 3. 리모트 사이트 조회 결과
  + 3-1. 리모트 경로 출력
 
-
-<br>
-
-## 실행 화면
-
-![image](https://user-images.githubusercontent.com/36910089/63744562-a77e2a80-c8da-11e9-9c4b-0ba902d2b575.png)
-
-![그림1](https://user-images.githubusercontent.com/38846776/63819323-d6021100-c97f-11e9-9379-84fcb891aa3e.png)
-
 <br>
 
 
@@ -86,7 +77,13 @@
 <br>
 
 
+## 실행 화면
 
+![image](https://user-images.githubusercontent.com/36910089/63744562-a77e2a80-c8da-11e9-9c4b-0ba902d2b575.png)
+
+![그림1](https://user-images.githubusercontent.com/38846776/63819323-d6021100-c97f-11e9-9379-84fcb891aa3e.png)
+
+<br>
 
 
 
