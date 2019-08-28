@@ -87,7 +87,8 @@ public class FileTransferCore {
      * @exception 
      */
 	public TreeParent getTreeDirectory(String path) {
-		String name = path.split("/")[path.split("/").length - 1];
+		String name ="";
+		name = path.split("/")[path.split("/").length - 1];
 		
 		// 1. 파일 객체 생성 (path 정보를 가지는 파일 만듬)
 		// 현재 경로를 파일 객체로 생성
@@ -234,7 +235,8 @@ public class FileTransferCore {
 						
 						if(treeItem.equals(remoteFullFilePath)) {
 							if(dirItem.isFolder()) {
-								new File(fileTransferModel.getLocalPath() + "/" + fileTransferModel.getRemoteFileName());
+								File file = new File(fileTransferModel.getLocalPath() + "/" + fileTransferModel.getRemoteFileName());
+								file.mkdir();
 								util.recursiveFolderDownload(remoteFullFilePath, fileTransferModel.getLocalPath() + "/" + fileTransferModel.getRemoteFileName());
 							}else {
 								util.download(fileTransferModel.getRemotePath(), fileTransferModel.getRemoteFileName(), fileTransferModel.getLocalPath());
