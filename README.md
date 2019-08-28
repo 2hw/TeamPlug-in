@@ -57,47 +57,5 @@
 
 ## 📂 Directory structure
 
-```bash
-                        
-FileTransfer										      #프로젝트
-└─src
-│   └─org
-│       └─inbus
-│           └─teamfiletransferclient
-│               ├─core
-│               │      FileTransferCore.java					      #컨트롤러
-│               │
-│               ├─exceptions
-│               │      InvalidServerInformationException.java	     #예외 처리
-│               │
-│               ├─impl
-│               │      IconImageUtil.java				       #아이콘을 표시하는 Util 클래스
-│               │      SFTPUtil.java					       #SFTP 연결 클래스 
-│               │      TableViewLabelProvider.java		       #Table에 표시되는 데이터 제어 클래스
-│               │      TreeViewContentProvider.java		       #Tree에 보여질 노드를 리턴하는 클래스
-│               │      TreeViewLabelProvider.java		       #Tree에 표시될 노드 제어 클래스
-│               │
-│               ├─model
-│               │      ConnectionInfo.java		#FTP 접속 정보 VO
-│               │      Directory.java			#접속한 서버의 디렉터리 VO
-│               │      FileTransfer.java						    #접속한 서버의 파일 정보 VO
-│               │      TreeObject.java			#Tree VO
-│               │      TreeParent.java			#하위 Tree VO
-│               │
-│               └─views
-│                       FileTransferView.java					   #플러그인 메인 뷰
-│	            NewDirectoryDialog.java                                 #새 디렉터리 생성 
-├─lib
-│      commons-lang-2.6.jar
-│      jsch-0.1.55.jar							      #SFTP 라이브러리
-│
-├─META-INF
-│   MANIFEST.MF
-│  .classpath
-│  .gitignore
-│  .project
-│  build.properties
-│  contexts.xml
-│  plugin.xml
-│  README.md
-```
+![image](https://user-images.githubusercontent.com/38846776/63817400-1f9a2e00-c977-11e9-94b9-7da41d476176.png)
+
