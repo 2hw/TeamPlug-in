@@ -14,7 +14,7 @@
 
 [![license](https://img.shields.io/badge/git-2.22-yellow.svg)](https://img.shields.io/badge/git-2.22-yellow) [![license](https://img.shields.io/badge/github-github.com%2F2hw%2FTeamPlug--in-green.svg)](https://img.shields.io/badge/github-github.com%2F2hw%2FTeamPlug--in-green) [![license](https://img.shields.io/badge/sourceTree-3.13-blue.svg)](https://img.shields.io/badge/sourceTree-3.13-blue)
 
-+ 깃허브를 통한 진행사항 및 이슈관리
++ 깃허브를 통한 진행 사항 및 이슈 관리
 
 <br>
 
@@ -42,14 +42,14 @@
 <br>
 
 > Chrome extension - *OctoTree* <br>
-> 많은 리포지토리를 컴퓨터에 다운로드하지 않고도 프로젝트 소스 코드를 탐색하기 위해 사용
+> 많은 리포지토리를 컴퓨터에 다운로드하지 않고. 프로젝트 소스 코드를 탐색하기 위해 사용
 
 ![image](https://user-images.githubusercontent.com/38846776/63823875-3a2cd100-c990-11e9-87f8-cb3cb8ff06a3.png)
 
 <br>
 
 > Chrome extension - *ZenHub* <br>
-> DashBoard 형식으로 Issue들을 가시적으로 관리 
+> DashBoard 형식으로 작성한 Issue들을 가시적으로 관리 
 
 ![image](https://user-images.githubusercontent.com/38846776/63824136-161dbf80-c991-11e9-96bc-97be66ad2d08.png)
 
