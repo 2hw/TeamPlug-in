@@ -27,12 +27,13 @@
 
 <br>
 ## 화면 구성
+
 ![image](https://user-images.githubusercontent.com/38846776/63819571-bc14fe00-c980-11e9-89e5-c8abb1bf966e.png)
 
 <br>
 
 ## 개발 일정 관리
-> 개발 일정을 GITHUB의 Milestone과 Issue로 관리
+> 개발 일정을 GITHUB의 Milestone과 Issue로 관리<br>
 > 일정을 가시적으로 표시하여 현재 진행도를 확인할 수 있다.
 
 
