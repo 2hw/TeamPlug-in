@@ -29,36 +29,44 @@
 
 ### 개발 일정 관리  
 
->  GITHUB의 Milestone과 Issue
-> -> 일정을 가시적으로 표시하여 현재 진행도를 확인
+>  GITHUB의 *Milestone*과 *Issue* <br>
+> 일정을 표시하여 현재 진행도를 확인
 
+ + *Milestone   :  issue들의 그룹,  이정표로써 진행 상황을 표현*
+ + *issue  :  프로젝트를 진행하면서 발생하는 모든 이슈 (버그 발생, 개발, 풀 리퀘스트 등등)*
+ + *커밋 메세지를 통한 이슈 Close  처리*   ->  ``` (Keyword] [Issue Number] [commit emssage (생략가능)]```
 
 ![image](https://user-images.githubusercontent.com/38846776/63754756-5d07a880-c8f0-11e9-9fad-e49740c5084c.png)
- + *Milestone   :  issue들의 그룹,  이정표로써 진행 상황을 표현*
-
 ![image](https://user-images.githubusercontent.com/38846776/63754982-bb348b80-c8f0-11e9-8d0a-4ac9ad07ad30.png)
-  + *issue  :  프로젝트를 진행하면서 발생하는 모든 이슈 (버그 발생, 개발, 풀 리퀘스트 등등)*
-  + *커밋 메세지를 통한 이슈 Close  처리*   ->  ``` (Keyword] [Issue Number] [commit emssage (생략가능)]```
+ 
+<br>
 
+> Chrome extension - *OctoTree* <br>
+> 많은 리포지토리를 컴퓨터에 다운로드하지 않고도 프로젝트 소스 코드를 탐색하기 위해 사용
 
-
+![image](https://user-images.githubusercontent.com/38846776/63823875-3a2cd100-c990-11e9-87f8-cb3cb8ff06a3.png)
 
 <br>
+
+> Chrome extension - *ZenHub* <br>
+> DashBoard 형식으로 Issue들을 가시적으로 관리 
+
+![image](https://user-images.githubusercontent.com/38846776/63824136-161dbf80-c991-11e9-96bc-97be66ad2d08.png)
+
+<br>
+
 
 ## 화면 구성
 
 ![image](https://user-images.githubusercontent.com/38846776/63820637-fb454e00-c984-11e9-92fa-77072c20b4b3.png)
 
 
-### 1 서버 연결 정보 입력창
+ 1. 서버 연결 정보 입력창
+- ② 로컬 사이트 조회  결과
+   2-1 로컬 경로 출력
+- ③ 리모트 사이트 조회 결과
+3-1 리모트 경로 출력
 
-### 2 로컬 사이트 조회  결과
-
-#### 	 2-1 로컬 경로 출력
-
-### 3 리모트 사이트 조회 결과
-
-#### 	 3-1 리모트 경로 출력
 
 <br>
 
