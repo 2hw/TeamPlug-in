@@ -321,8 +321,7 @@ public class FileTransferView extends ViewPart {
 				// count (label_localResult)
 				int fCount = 0;
 				int dCount = 0;
-				int longSize = 0;
-				String strSize = "";
+				int totSize = 0;
 				
 				for(int i = 0; i < local_allDirectoryList.size(); i++) {
 					
@@ -332,11 +331,10 @@ public class FileTransferView extends ViewPart {
 						fCount++;
 					}
 					
-					longSize = longSize += local_allDirectoryList.get(i).length();
-					strSize = Long.toString(longSize);
+					totSize = totSize += local_allDirectoryList.get(i).length();
 					
 				}
-				label_localResult.setText("디렉터리 : " + dCount + "개, 파일 : " + fCount + "개, 총 크기 : " + strSize + "바이트");
+				label_localResult.setText("디렉터리 : " + dCount + "개, 파일 : " + fCount + "개, 총 크기 : " + String.format("%,d", totSize) + "바이트");
 			}
 			
 		});
@@ -395,7 +393,7 @@ public class FileTransferView extends ViewPart {
 					
 					totSize = totSize += directoryList.get(i).getSize();
 				}
-				label_remoteResult.setText("디렉터리 : " + dCount + "개, 파일 : " + fCount + "개, 총 크기 : " + totSize + "바이트");
+				label_remoteResult.setText("디렉터리 : " + dCount + "개, 파일 : " + fCount + "개, 총 크기 : " + String.format("%,d", totSize)+ "바이트");
 			}
 			
 		});
