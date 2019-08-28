@@ -43,10 +43,6 @@
 
   <br>
 
-## 개발 구성
-
-
-<br>
 
 ## 실행 화면
 
@@ -59,3 +55,4 @@
 
 ![image](https://user-images.githubusercontent.com/38846776/63817400-1f9a2e00-c977-11e9-94b9-7da41d476176.png)
 
+<br>
