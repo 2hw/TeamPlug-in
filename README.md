@@ -26,10 +26,14 @@
 5.  업로드, 다운로드 기능
 
 <br>
+## 화면 구성
+![image](https://user-images.githubusercontent.com/38846776/63819571-bc14fe00-c980-11e9-89e5-c8abb1bf966e.png)
+
+<br>
 
 ## 개발 일정 관리
 > 개발 일정을 GITHUB의 Milestone과 Issue로 관리
-> 일정을 가시적으로 표시하여 현재 진행도를 확인
+> 일정을 가시적으로 표시하여 현재 진행도를 확인할 수 있다.
 
 
 ![image](https://user-images.githubusercontent.com/38846776/63754756-5d07a880-c8f0-11e9-9fad-e49740c5084c.png)
@@ -48,6 +52,8 @@
 
 ![image](https://user-images.githubusercontent.com/36910089/63744562-a77e2a80-c8da-11e9-9c4b-0ba902d2b575.png)
 
+![그림1](https://user-images.githubusercontent.com/38846776/63819323-d6021100-c97f-11e9-9379-84fcb891aa3e.png)
+
 <br>
 
 
@@ -56,3 +62,11 @@
 ![image](https://user-images.githubusercontent.com/38846776/63817400-1f9a2e00-c977-11e9-94b9-7da41d476176.png)
 
 <br>
+
+
+
+
+
+
+
+
