@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ContributionManager;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -263,6 +264,7 @@ public class FileTransferView extends ViewPart {
 		table_file = tableViewer_1.getTable();
 		table_file.setBounds(0, 0, 1070, 90);
 
+	
 		/*	Create User Event Function	*/
 		
 		//Connection button Event
@@ -320,24 +322,9 @@ public class FileTransferView extends ViewPart {
 				localTBViewer.setInput(local_allDirectoryList);
 				localTBViewer.refresh();
 				
-				// count (label_localResult)
-				int fCount = 0;
-				int dCount = 0;
-				int totSize = 0;
-				
-				for(int i = 0; i < local_allDirectoryList.size(); i++) {
-					
-					if(local_allDirectoryList.get(i).isDirectory() == true) {
-						dCount++;
-					} else if (local_allDirectoryList.get(i).isDirectory() == false) {
-						fCount++;
-					}
-					
-					totSize = totSize += local_allDirectoryList.get(i).length();
-					
-				}
-				label_localResult.setText("디렉터리 : " + dCount + "개, 파일 : " + fCount + "개, 총 크기 : " + String.format("%,d", totSize) + "바이트");
-			}
+				// 디렉터리 정보 라벨에 출력
+				TreeDirectoryInfo(label_localResult, local_allDirectoryList);
+			} 
 			
 		});
 		
@@ -379,23 +366,9 @@ public class FileTransferView extends ViewPart {
   				combo_remotePath.add(treePath, num++);
 				
 				getRemoteTable(remot_allDirectoryList);
-					
-				// count (label_remoteResult)
-				int fCount = 0;
-				int dCount = 0;
-				int totSize = 0;
 				
-				for(int i = 0; i < directoryList.size(); i++) {
-					
-					if(directoryList.get(i).isFolder() == true) {
-						dCount++;
-					} else if (directoryList.get(i).isFolder() == false) {
-						fCount++;
-					}
-					
-					totSize = totSize += directoryList.get(i).getSize();
-				}
-				label_remoteResult.setText("디렉터리 : " + dCount + "개, 파일 : " + fCount + "개, 총 크기 : " + String.format("%,d", totSize)+ "바이트");
+				// 디렉터리 정보 라벨에 출력
+				TreeDirectoryInfo(label_remoteResult, directoryList);
 			}
 			
 		});
@@ -422,7 +395,41 @@ public class FileTransferView extends ViewPart {
 		makeActions();
 	}
 	
+	private void TreeDirectoryInfo(Label resultLabel, List<?> list) {
+ 		
+ 		int fCount = 0;
+ 		int dCount = 0;
+ 		int totSize = 0;
+ 		
+ 		for(int i = 0; i < list.size(); i++) {
+ 			
+ 			if(list.get(i) instanceof File) {
+ 				
+ 				if(((File) list.get(i)).isDirectory() == true) {
+ 					dCount++;
+ 				} else if (((File) list.get(i)).isDirectory() == false) {
+ 					fCount++;
+ 				}
+ 
+ 				totSize += ((File) list.get(i)).length();
+ 				
+ 			} else if (list.get(i) instanceof Directory) {
+ 				
+ 				if(((Directory) list.get(i)).isFolder() == true) {
+					dCount++;
+				} else if (((Directory) list.get(i)).isFolder() == false) {
+					fCount++;
+				}
+				
+				totSize += ((Directory) list.get(i)).getSize();
+			}
+ 		}
+ 		
+ 		resultLabel.setText("디렉터리 : " + dCount + "개, 파일 : " + fCount + "개, 총 크기 : " + String.format("%,d", totSize) + "바이트");
+ 		
+ 	}
 	
+
 	//remote 트리 초기화 후 서버쪽 디렉토리 구조 가져오기
 	private void getRemoteTree(TreeParent root) {
 		TreeParent invisibleRoot = new TreeParent("", "");
