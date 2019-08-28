@@ -18,24 +18,19 @@
 
 <br>
 
-## 개발 파트
+## 개발 구성
+
+### 개발 파트
 1.  SFTP 연결
 2.  local, 서버 디렉터리 구조 출력
 3.  선택한 경로 표시 및 크기 표시
 4.  디렉토리 생성 및 삭제
-5.  업로드, 다운로드 기능
+5.  업로드, 다운로드  기능
 
-<br>
+### 개발 일정 관리  
 
-## 화면 구성
-
-![image](https://user-images.githubusercontent.com/38846776/63819692-33e32880-c981-11e9-9eb0-bf95360e7102.png)
-
-<br>
-
-## 개발 일정 관리
-> 개발 일정을 GITHUB의 Milestone과 Issue로 관리<br>
-> 일정을 가시적으로 표시하여 현재 진행도를 확인
+>  GITHUB의 Milestone과 Issue
+> -> 일정을 가시적으로 표시하여 현재 진행도를 확인
 
 
 ![image](https://user-images.githubusercontent.com/38846776/63754756-5d07a880-c8f0-11e9-9fad-e49740c5084c.png)
@@ -47,8 +42,22 @@
 
 
 
-  <br>
 
+<br>
+
+## 화면 구성
+
+![image](https://user-images.githubusercontent.com/38846776/63820637-fb454e00-c984-11e9-92fa-77072c20b4b3.png)
+.png)
+
+ 1. 서버 연결 정보 입력창
+- ② 로컬 사이트 조회  결과
+   2-1 로컬 경로 출력
+- ③ 리모트 사이트 조회 결과
+3-1 리모트 경로 출력
+
+
+<br>
 
 ## 실행 화면
 
