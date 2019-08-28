@@ -292,9 +292,15 @@ public class SFTPUtil{
      * @exception 
      */
     
-    public void createDir(String dir, String path) throws Exception{
+    public void createDir(String dir, String path) {
 
-    			channelSftp.mkdir(path + "/" + dir);
+			try {
+				
+				channelSftp.mkdir(path + "/" + dir);
+			} catch (SftpException e) {
+				
+				e.printStackTrace();
+			}
     }
     
     /**

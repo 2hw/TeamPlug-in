@@ -93,6 +93,8 @@ public class FileTransferView extends ViewPart {
 	private Table table_local;
 	private Table table_remote;
 	private Table table_file;
+	private Label label_localResult;
+	private Label label_remoteResult;
 	
 	private Action localTableAction;
 	private Action remoteTableAction;
@@ -204,7 +206,7 @@ public class FileTransferView extends ViewPart {
 		tblclmnNewColumn2_2.setWidth(100);
 		tblclmnNewColumn2_2.setText(treeModel.COLUMN_HEADER[2]);
 		
-		Label label_localResult = new Label(group_local, SWT.NONE);
+		label_localResult = new Label(group_local, SWT.NONE);
 		label_localResult.setBounds(0, 550, 530, 30);
 		
 		Group group_remote = new Group(composite_main, SWT.NONE);
@@ -251,7 +253,7 @@ public class FileTransferView extends ViewPart {
 		tblclmnNewColumn_4.setWidth(100);
 		tblclmnNewColumn_4.setText(treeModel.COLUMN_HEADER[4]);
 		
-		Label label_remoteResult = new Label(group_remote, SWT.NONE);
+		label_remoteResult = new Label(group_remote, SWT.NONE);
 		label_remoteResult.setBounds(0, 550, 530, 30);
 		
 		Group group_fileTable = new Group(composite_main, SWT.NONE);
@@ -567,6 +569,24 @@ public class FileTransferView extends ViewPart {
 					//Print Directory List
 					localTBViewer.setInput(local_allDirectoryList);
 					localTBViewer.refresh();
+					
+					// count (label_localResult)
+					int fCount = 0;
+					int dCount = 0;
+					int totSize = 0;
+					
+					for(int i = 0; i < local_allDirectoryList.size(); i++) {
+						
+						if(local_allDirectoryList.get(i).isDirectory() == true) {
+							dCount++;
+						} else if (local_allDirectoryList.get(i).isDirectory() == false) {
+							fCount++;
+						}
+						
+						totSize = totSize += local_allDirectoryList.get(i).length();
+						
+					}
+					label_localResult.setText("디렉터리 : " + dCount + "개, 파일 : " + fCount + "개, 총 크기 : " + String.format("%,d", totSize) + "바이트");
 				}else {
 					//remote service
 					//서버 접속해서 디렉토리 가져온 후 테이블 refresh
@@ -576,6 +596,23 @@ public class FileTransferView extends ViewPart {
 					remot_allDirectoryList = new ArrayList<Directory>();
 					remot_allDirectoryList.addAll(fileTransfer.getFileModel());
 					getRemoteTable(remot_allDirectoryList);
+					
+					// count (label_remoteResult)
+					int fCount = 0;
+					int dCount = 0;
+					int totSize = 0;
+					
+					for(int i = 0; i < directoryList.size(); i++) {
+						
+						if(directoryList.get(i).isFolder() == true) {
+							dCount++;
+						} else if (directoryList.get(i).isFolder() == false) {
+							fCount++;
+						}
+						
+						totSize = totSize += directoryList.get(i).getSize();
+					}
+					label_remoteResult.setText("디렉터리 : " + dCount + "개, 파일 : " + fCount + "개, 총 크기 : " + String.format("%,d", totSize)+ "바이트");
 				}
 			}
 		};
