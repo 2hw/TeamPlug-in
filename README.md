@@ -29,7 +29,7 @@
 
 ## 개발 일정 관리
 > 개발 일정을 GITHUB의 Milestone과 Issue로 관리
-일정을 가시적으로 표시하여 현재 진행도를 확인할 수 있다.
+> 일정을 가시적으로 표시하여 현재 진행도를 확인
 
 
 ![image](https://user-images.githubusercontent.com/38846776/63754756-5d07a880-c8f0-11e9-9fad-e49740c5084c.png)
