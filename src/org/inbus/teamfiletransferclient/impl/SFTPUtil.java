@@ -124,16 +124,16 @@ public class SFTPUtil{
             e.printStackTrace();
 
         } finally {
-
-            try {
-
-                in.close();
-
-            } catch (IOException e) {
-
-                e.printStackTrace();
-
-            }
+//
+//            try {
+//
+//                in.close();
+//
+//            } catch (IOException e) {
+//
+//                e.printStackTrace();
+//
+//            }
 
         }
 
@@ -153,7 +153,7 @@ public class SFTPUtil{
         
         File sourceFile = new File(sourcePath);
         if (sourceFile.isFile()) {
-            
+            System.out.println(channelSftp.pwd());
             // copy if it is a file
             channelSftp.cd(destinationPath);
             if (!sourceFile.getName().startsWith("."))
@@ -231,17 +231,17 @@ public class SFTPUtil{
 
         } finally {
 
-            try {
-
-                out.close();
-
-                in.close();
-
-            } catch (IOException e) {
-
-                e.printStackTrace();
-
-            }
+//            try {
+//
+//                out.close();
+//
+//                in.close();
+//
+//            } catch (IOException e) {
+//
+//                e.printStackTrace();
+//
+//            }
         }
     }
 
@@ -268,6 +268,8 @@ public class SFTPUtil{
             		if(!item.getFilename().startsWith(".")) {
             			
             			new File(destinationPath + PATHSEPARATOR + item.getFilename());
+            			System.out.println(channelSftp.pwd());
+            			channelSftp.cd(sourcePath);
             			channelSftp.get(sourcePath + PATHSEPARATOR + item.getFilename(),
             					destinationPath + PATHSEPARATOR + item.getFilename()); // Download file from source (source filename, destination filename).
             		}
